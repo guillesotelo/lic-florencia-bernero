@@ -13,9 +13,9 @@ export default function Footer({ }: Props) {
             <div className="footer__col">
                 <nav className="footer__nav">
                     <ul className="footer__nav-list">
-                        <li onClick={() => history.push('/sobre-mi')} className="footer__nav-list-item">Sobre mí</li>
+                        <li onClick={() => history.push('/subscripcion')} className="footer__nav-list-item">Blog</li>
                         <li onClick={() => history.push('/contacto')} className="footer__nav-list-item">Contacto</li>
-                        <li onClick={() => history.push('/cuenta')} className="footer__nav-list-item">Iniciar Sesión</li>
+                        <li onClick={() => history.push('/sobre-mi')} className="footer__nav-list-item">Sobre mí</li>
                     </ul>
                 </nav>
             </div>
@@ -29,9 +29,9 @@ export default function Footer({ }: Props) {
             <div className="footer__col">
                 <nav className="footer__nav">
                     <ul className="footer__nav-list">
-                        <li onClick={() => history.push('/subscripcion')} className="footer__nav-list-item">Subscribite</li>
                         <li onClick={() => history.push('/politicas')} className="footer__nav-list-item">Políticas de Privacidad</li>
                         <li onClick={() => history.push('/cookies')} className="footer__nav-list-item">Cookies</li>
+                        <li onClick={() => history.push('/cuenta')} className="footer__nav-list-item">Iniciar Sesión</li>
                     </ul>
                 </nav>
             </div>
