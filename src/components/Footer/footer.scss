@@ -1,0 +1,52 @@
+.footer {
+    &__container {
+        height: 30vh;
+        width: 100%;
+        background-color: #d3b4b4;
+        color: rgb(70, 70, 70);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__col {
+        display: flex;
+        flex-direction: column;
+        margin: 0 4rem;
+    }
+
+    &__nav {
+        &-list {
+            display: flex;
+            flex-direction: column;
+            gap: .7rem;
+            padding: 0;
+
+            &-item {
+                cursor: pointer;
+                transition: .2s;
+
+                &:hover {
+                    opacity: .7;
+                }
+            }
+        }
+    }
+
+    &__social {
+        display: flex;
+        gap: 1.5rem;
+
+        &-svg {
+            height: 2rem;
+            cursor: pointer;
+            transition: .2s;
+            opacity: .5;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+}

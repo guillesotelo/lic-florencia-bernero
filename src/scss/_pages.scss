@@ -1,0 +1,35 @@
+@import '../pages/Home/home.scss';
+
+.page {
+    &__header {
+        &-title {
+            font-weight: normal;
+            width: 82vw;
+        }
+    }
+
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    &__row {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        margin-top: 10vh;
+        min-height: 190vh;
+    }
+}
+
+@media only screen and (max-width: 640px) {
+    .page {
+        &__row {
+        }
+    }
+}
