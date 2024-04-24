@@ -15,3 +15,5 @@ export type userType = {
     isSuper?: boolean
     newData?: userType
 }
+
+export type onChangeEventType = React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>

@@ -21,7 +21,7 @@ export default function Header({ }: Props) {
           <ul className='header__menu'>
             <li><a onClick={() => history.push('/')} className='header__menu-item'>Inicio</a></li>
             <li><a onClick={() => history.push('/recursos')} className='header__menu-item'>Recursos</a></li>
-            <li><a onClick={() => history.push('/reserva')} className='header__menu-item'>Reservar</a></li>
+            <li><a onClick={() => history.push('/booking')} className='header__menu-item'>Reservar</a></li>
             <li><a onClick={() => history.push('/blog')} className='header__menu-item'>Blog</a></li>
             <li><a onClick={() => history.push('/contacto')} className='header__menu-item'>Contacto</a></li>
             <li><a onClick={() => history.push('/sobre-mi')} className='header__menu-item'>Sobre mí</a></li>
