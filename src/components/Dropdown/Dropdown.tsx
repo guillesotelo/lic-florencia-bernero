@@ -17,6 +17,7 @@ type Props = {
     style?: React.CSSProperties
     multiselect?: boolean
     loading?: boolean
+    disabled?: boolean
 }
 
 export default function Dropdown(props: Props) {
@@ -39,8 +40,11 @@ export default function Dropdown(props: Props) {
         maxHeight,
         style,
         multiselect,
-        loading
+        loading,
+        disabled
     } = props
+
+    const dropdownStyles: React.CSSProperties = { ...style, opacity: disabled ? .5 : 1, pointerEvents: disabled ? 'none' : 'unset', cursor: disabled ? 'not-allowed' : '' }
 
     useEffect(() => {
         const dropdownListener = () => window.addEventListener('mouseup', (e: MouseEvent) => {
@@ -187,7 +191,7 @@ export default function Dropdown(props: Props) {
 
     const renderMultiSelect = () => {
         return (
-            <div className={`dropdown__container`} style={style}>
+            <div className={`dropdown__container`} style={dropdownStyles}>
                 {label ? <h4 className={`dropdown__label`}>{label}</h4> : ''}
                 <div ref={dropRef} className={`dropdown__select-section`}>
                     {loading ? renderLoading() : renderSelectedItems()}
@@ -199,7 +203,7 @@ export default function Dropdown(props: Props) {
 
     const renderSimpleSelect = () => {
         return (
-            <div className={`dropdown__container`} style={style}>
+            <div className={`dropdown__container`} style={dropdownStyles}>
                 {label ? <h4 className={`dropdown__label`}>{label}</h4> : ''}
                 <div ref={dropRef} className={`dropdown__select-section`}>
                     {loading ? renderLoading() : renderSelectedItem()}

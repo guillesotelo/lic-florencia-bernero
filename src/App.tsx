@@ -29,9 +29,7 @@ function App() {
       <Route exact path="/">
         <div className={`page__wrapper`}>
           <Header />
-          <div className={`page__row`}>
             <Home />
-          </div>
           <Footer />
         </div>
       </Route>
@@ -39,9 +37,7 @@ function App() {
       <Route exact path="/politicas-de-privacidad">
         <div className={`page__wrapper`}>
           <Header />
-          <div className={`page__row`}>
             <Privacy />
-          </div>
           <Footer />
         </div>
       </Route>
@@ -49,9 +45,7 @@ function App() {
       <Route exact path="/cookies">
         <div className={`page__wrapper`}>
           <Header />
-          <div className={`page__row`}>
             <Cookies />
-          </div>
           <Footer />
         </div>
       </Route>
@@ -59,9 +53,7 @@ function App() {
       <Route exact path="/login">
         <div className={`page__wrapper`}>
           <Header />
-          <div className={`page__row`}>
             <Login />
-          </div>
           <Footer />
         </div>
       </Route>
@@ -70,9 +62,7 @@ function App() {
       <Route exact path="/booking">
         <div className={`page__wrapper`}>
           <Header />
-          <div className={`page__row`}>
             <Booking />
-          </div>
           <Footer />
         </div>
       </Route>
@@ -81,9 +71,7 @@ function App() {
       <Route>
         <div className={`page__wrapper`}>
           <Header />
-          <div className={`page__row`}>
             <Home />
-          </div>
           <Footer />
         </div>
       </Route>

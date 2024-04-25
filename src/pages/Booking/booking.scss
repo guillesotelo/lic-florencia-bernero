@@ -17,12 +17,21 @@
 
         &-title {
             margin: 0 0 1rem 0;
+            font-weight: normal;
         }
 
         &-container {
             border: 1px solid rgba(0, 0, 0, 0.078);
             box-shadow: .5rem 1rem 2rem rgba(0, 0, 0, 0.196);
             border-radius: 1rem;
+            margin-bottom: 4rem;
+        }
+
+        &-datepicker {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: space-between;
         }
     }
 }

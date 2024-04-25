@@ -55,6 +55,7 @@ export const paisesHispanohablantes = [
 ]
 
 export const tiposTerapias = [
+    "(Sin especificar)",
     "Terapia Deportiva",
     "Terapia Cognitivo-Conductual",
     "Terapia de Pareja",
@@ -76,3 +77,14 @@ export const tiposTerapias = [
     "Terapia Artística",
     "Terapia de Apoyo Emocional"
 ]
+
+export const dateOptions: Intl.DateTimeFormatOptions = {
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit',
+}
+
+export const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: '2-digit',
+    minute: '2-digit',
+}
