@@ -31,16 +31,16 @@ export default function Login({ }: Props) {
             const logged = await loginUser(data)
             if (logged) {
                 setIsLoggedIn(true)
-                toast.success(`Hola de nuevo ${logged.username ? logged.username.split(' ')[0] : ''}!`)
+                toast.success(`Hola ${logged.username ? logged.username.split(' ')[0] : ''}!`)
                 setTimeout(() => {
                     setIsLoggedIn(true)
                     history.push('/')
                 }, 2000)
             }
-            else toast.error('Login Error. Please try again.')
+            else toast.error('Ocurrió un error. Intenta nuevamente.')
             setLoading(false)
         } catch (err) {
-            toast.error('Login Error. Please try again.')
+            toast.error('Ocurrió un error. Intenta nuevamente.')
             console.error(err)
             setLoading(false)
         }

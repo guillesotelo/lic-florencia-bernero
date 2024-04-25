@@ -1,3 +1,5 @@
+import { dataObj, onChangeEventType } from "../types"
+
 export const chunkArray = (arr: any[], chunkSize: number) => {
     const result = []
     for (let i = 0; i < arr.length; i += chunkSize) {
@@ -86,4 +88,9 @@ export const getDateWithGivenHour = (hour: number) => {
     today.setSeconds(0)
     today.setHours(today.getHours() - hour)
     return today.toLocaleString()
+}
+
+export const updateData = (key: string, e: onChangeEventType, data: dataObj, setData: (value: any) => void) => {
+    const value = e.target.value
+    setData({ ...data, [key]: value })
 }

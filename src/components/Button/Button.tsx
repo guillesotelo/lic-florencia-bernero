@@ -20,8 +20,8 @@ export default function Button({ label, handleClick, className, bgColor, textCol
             className="button__icon"
             onClick={handleClick}
             style={{
-                backgroundColor: bgColor,
-                border: `1px solid ${bgColor}`,
+                backgroundColor: bgColor || '#eeeeee',
+                border: `1px solid ${bgColor || '#eeeeee'}`,
                 color: textColor || 'black',
                 opacity: disabled ? '.3' : '',
                 padding: '.2vw',
@@ -37,11 +37,12 @@ export default function Button({ label, handleClick, className, bgColor, textCol
             onMouseEnter={() => setButtonStyle({
                 ...style,
                 backgroundColor: 'transparent',
-                color: bgColor || 'black'
+                color: bgColor || 'black',
+                border: `1px solid ${bgColor || 'lightgray'}`
             })}
             onMouseLeave={() => setButtonStyle({
                 ...style,
-                backgroundColor: bgColor,
+                backgroundColor: bgColor || '#eeeeee',
                 color: textColor || 'black',
             })}
         >
@@ -53,8 +54,8 @@ export default function Button({ label, handleClick, className, bgColor, textCol
             className={className || 'button__default'}
             onClick={handleClick}
             style={{
-                backgroundColor: bgColor,
-                border: `1px solid ${bgColor}`,
+                backgroundColor: bgColor || '#eeeeee',
+                border: `1px solid ${bgColor || '#eeeeee'}`,
                 color: textColor || 'black',
                 opacity: disabled ? '.3' : '',
                 cursor: disabled ? 'not-allowed' : '',
@@ -64,11 +65,12 @@ export default function Button({ label, handleClick, className, bgColor, textCol
             onMouseEnter={() => setButtonStyle({
                 ...style,
                 backgroundColor: 'transparent',
-                color: textColor || bgColor || 'black'
+                color: bgColor || 'black',
+                border: `1px solid ${bgColor || 'lightgray'}`
             })}
             onMouseLeave={() => setButtonStyle({
                 ...style,
-                backgroundColor: bgColor,
+                backgroundColor: bgColor || '#eeeeee',
                 color: textColor || 'black',
             })}
         >

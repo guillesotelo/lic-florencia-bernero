@@ -1,7 +1,13 @@
 @import '../pages/Home/home.scss';
 @import '../pages/Login/login.scss';
+@import '../pages/Booking/booking.scss';
 
 .page {
+
+    &__container {
+        // margin-bottom: 4rem;
+    }
+
     &__header {
         &-title {
             font-weight: normal;
@@ -17,12 +23,16 @@
         position: relative;
     }
 
+    &__col {
+        display: flex;
+        flex-direction: column;
+    }
+
     &__row {
         display: flex;
         flex-direction: row;
         justify-content: center;
         position: relative;
-        overflow: hidden;
         margin-top: 10vh;
         min-height: 90vh;
     }
@@ -30,7 +40,6 @@
 
 @media only screen and (max-width: 640px) {
     .page {
-        &__row {
-        }
+        &__row {}
     }
 }

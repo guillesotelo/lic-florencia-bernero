@@ -14,18 +14,31 @@ export default function Home({ }: Props) {
       <div className="home__section">
         <div className="home__landing">
           <div className="home__landing-text">
-            <div className="home__landing-text-row">
+            <div className="home__landing-text-col">
               <h1 className="home__landing-title">Equilibrio<br />y Superación</h1>
               <h2 className="home__landing-subtitle">Psicología Deportiva y Bienestar Integral</h2>
+              <div style={{ textAlign: 'center', width: '90vw' }}>
+              <p className='home__landing-cta'>Da el primer paso hacia una vida mejor</p>
+              <Button
+                label='Reserva una cita'
+                handleClick={() => history.push('/booking')}
+                style={{ 
+                  transform: 'scale(1.5)', 
+                  height: 'fit-content',
+                   width: 'fit-content',
+                   opacity: 0,
+                   animation: 'fade-in 2s ease forwards',
+                   animationDelay: '1.5s'
+                  }}
+                bgColor={APP_COLORS.SKY}
+              />
+              </div>
             </div>
-            <Button
-              label='Reserva una cita'
-              handleClick={() => history.push('/booking')}
-              style={{ transform: 'scale(1.5)', height: 'fit-content' }}
-              bgColor={APP_COLORS.SALMON}
-            />
+            <div className="home__landing-text-col" style={{ textAlign: 'left', alignItems: 'center' }}>
+            </div>
           </div>
-          <img src={Running} alt="" className="home__landing-img" />
+          <div className="home__landing-img-gradient" />
+          <img src={Running} alt="Equilibrio y Superación (imagen)" className="home__landing-img" />
         </div>
       </div>
     </div>
