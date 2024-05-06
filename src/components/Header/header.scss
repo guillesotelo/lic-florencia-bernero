@@ -29,18 +29,21 @@
         gap: 1rem;
         cursor: pointer;
 
-        &:hover .header__logo-img {
+        &:hover .header__logo-text {
             filter: brightness(110%);
             transform: translateX(1%);
         }
 
-        &-img {
-            height: 1.2rem;
+        &-text {
+            height: 2rem;
+            line-height: 2rem;
             transition: .5s;
+            font-size: 2rem;
+            color: #6575A8;
+        }
 
-            &-iso {
-                height: 4rem;
-            }
+        &-img-iso {
+            height: 3.5rem;
         }
     }
 
@@ -54,7 +57,7 @@
 
         &-item {
             text-decoration: none;
-            color: #FF6161;
+            color: #F7A072;
             transition: .3s;
             cursor: pointer;
             position: relative;
@@ -68,7 +71,7 @@
                 height: 2px;
                 bottom: 0;
                 left: 0;
-                background-color: #FF6161;
+                background-color: #F7A072;
                 transform-origin: bottom right;
                 transition: transform 0.4s ease-out;
             }

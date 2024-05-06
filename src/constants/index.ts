@@ -3,6 +3,15 @@ export const APP_COLORS = {
     OCEAN: '#004D73',
     SKY: '#CFF6FF',
     METAL: '#557B97',
+
+    // Palette
+    HONEYDEW: '#D9E5D6',
+    CERULEAN: '#6575A8',
+    NUDE: '#F9F3DC',
+    ATOMIC: '#F7A072',
+    SANDYBROWN: '#FF9B42',
+
+    TEXT: '#393939',
 }
 
 export const provinciasArgentinas = [

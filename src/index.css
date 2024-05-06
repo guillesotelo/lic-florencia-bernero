@@ -20,6 +20,11 @@ body {
   color-scheme: light;
 }
 
+a {
+  color: #6575A8;
+  text-decoration: none;
+}
+
 /* Fix warning on Edge */
 .react-datepicker__input-time-container .react-datepicker-time__input-container .react-datepicker-time__input input[type=time] {
   -webkit-appearance: textfield;

@@ -1,10 +1,65 @@
 .home {
     &__container {
+        background-color: #F9F3DC;
+    }
+
+    &__col {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
     }
 
     &__section {
         width: 100%;
-        min-height: 200vh;
+        height: 100vh;
+        padding: 2rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+
+        &-title {
+            font-size: 3rem;
+            margin: 0 0 4rem;
+        }
+
+        &-col {
+            display: flex;
+            flex-direction: column;
+            width: 45%;
+        }
+
+        &-wrap {
+            display: flex;
+            flex-direction: row;
+            gap: 3rem;
+        }
+
+        &-text {
+            font-size: 2rem;
+            margin: 0;
+            color: #393939;
+
+            &-module {
+                margin: .5rem 0;
+                font-size: 1.2rem;
+                background-color: #D9E5D6;
+                padding: 1rem;
+                border-radius: 1rem;
+                width: fit-content;
+                align-self: center;
+                opacity: 0;
+                animation: fade-in-down 1s ease-in forwards;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                transition: .5s;
+
+                &:hover {
+                    filter: brightness(108%);
+                }
+            }
+        }
     }
 
     &__landing {
@@ -31,11 +86,11 @@
         }
 
         &-cta {
-            font-size: 2.5rem;
-            color: #06343f;
-            margin-top: 5rem;
+            font-size: 2rem;
+            color: #D9E5D6;
+            margin-top: 6rem;
             opacity: 0;
-            animation: fade-in 2s ease forwards;
+            animation: fade-in-up 2s ease forwards;
             animation-delay: 1.5s;
         }
 
@@ -49,7 +104,7 @@
 
         &-subtitle {
             font-size: 2.5rem;
-            background-color: rgb(63, 63, 63);
+            background-color: rgba(63, 63, 63, 0.296);
             padding: .5rem;
             margin: 2rem 0;
             width: fit-content;

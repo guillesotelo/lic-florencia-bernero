@@ -2,7 +2,7 @@
     &__container {
         height: 30vh;
         width: 100%;
-        background-color: #d3b4b4;
+        background-color: #e8e8e8;
         color: rgb(70, 70, 70);
         display: flex;
         flex-direction: row;
@@ -28,7 +28,7 @@
                 transition: .2s;
 
                 &:hover {
-                    opacity: .7;
+                    opacity: .5;
                 }
             }
         }

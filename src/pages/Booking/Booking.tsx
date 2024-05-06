@@ -97,7 +97,8 @@ export default function Booking({ }: Props) {
       })
   }
 
-  const checkData = () => data.fullname && data.email && data.email.includes('.') && data.email.includes('@') && data.date
+  const checkData = () => data.fullname && data.email && data.email.includes('.')
+    && data.email.includes('@') && data.date && data.fullname.includes(' ')
 
   const renderNewBooking = () => {
     return (

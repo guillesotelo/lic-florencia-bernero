@@ -26,10 +26,22 @@
     }
 }
 
+@keyframes fade-out-up {
+    0% {
+        opacity: 1;
+        transform: translateY(0%);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-30%);
+    }
+}
+
 @keyframes fade-in-down {
     0% {
         opacity: 0;
-        transform: translateY(-20%);
+        transform: translateY(-30%);
     }
 
     100% {
@@ -154,4 +166,18 @@
     100% {
         background-color: rgba(0, 128, 0, 0);
     }
+}
+
+.scroll-item {
+    opacity: 0;
+}
+
+.appear-down {
+    animation: fade-in-down 2s forwards;
+    animation-delay: .5s;
+}
+
+.disappear {
+    animation: fade-out-up 1s forwards;
+    animation-delay: 0 !important;
 }
