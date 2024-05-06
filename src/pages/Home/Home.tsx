@@ -79,9 +79,9 @@ export default function Home({ }: Props) {
             <>
               <div className="home__section">
                 <div className="home__section-col" style={{ textAlign: 'center' }}>
-                  <p className='home__section-text scroll-item' style={{ fontSize: '3rem', margin: '5vh 0' }}>Hola, muchas gracias por estar acá.</p>
+                  <p className='home__section-text scroll-item' style={{ fontSize: '2.5rem', margin: '0 0 5vh 0' }}>Hola, muchas gracias por estar acá.</p>
                   <p className='home__section-text scroll-item'>Este espacio se encuentra dedicado a la Psicología y al entrenamiento en habilidades asociadas al bienestar:</p>
-                  <div className='home__section-col' style={{ width: '100%', justifyContent: 'space-between', marginTop: '8vh', height: '35vh' }}>
+                  <div className='home__section-col' style={{ width: '100%', justifyContent: 'space-between', marginTop: '6vh' }}>
                     <p className='home__section-text-module' style={{ animationDelay: '1.5s' }}>Habilidades de conexión con el momento presente (a través de la práctica del mindfulness).</p>
                     <p className='home__section-text-module' style={{ animationDelay: '2s' }}>Habilidades de efectividad interpersonal.</p>
                     <p className='home__section-text-module' style={{ animationDelay: '2.5s' }}>Habilidades de regulación emocional.</p>
@@ -91,20 +91,20 @@ export default function Home({ }: Props) {
               </div>
 
               <div className="home__section" style={{ backgroundColor: '#e8e8e8' }}>
-                <div className="home__section-col" style={{ textAlign: 'justify' }}>
-                  <p className='home__section-text scroll-item' style={{ fontSize: '1.4rem', margin: '2rem 0', animationDelay: '.5s' }}>
+                <div className="home__section-col" style={{ textAlign: 'center' }}>
+                  <p className='home__section-text scroll-item' style={{ fontSize: '1.4rem', margin: '1rem 0', animationDelay: '.5s' }}>
                     En la actualidad, sabemos que cuando integramos estas habilidades a nuestras vidas, a través de la práctica, podemos transformar nuestra manera de estar en el mundo, logrando atravesar esta experiencia conectados a lo que nos ofrece el momento presente, y acercándonos, a partir del vínculo con nuestros pensamientos y acciones, a la persona que queremos ser y a la vida que deseamos habitar.
                   </p>
 
-                  <p className='home__section-text scroll-item' style={{ fontSize: '1.4rem', margin: '2rem 0', animationDelay: '.9s' }}>
+                  <p className='home__section-text scroll-item' style={{ fontSize: '1.4rem', margin: '1rem 0', animationDelay: '.9s' }}>
                     Aquí encontrarás un lugar seguro, donde trabajaremos en relación a tu experiencia vital actual, a través de un proceso de Psicoterapia y/o del entrenamiento en habilidades. Nos propondremos objetivos y estableceremos un plan de abordaje de los mismos, con el fin de poder alcanzarlos.
                   </p>
 
-                  <p className='home__section-text scroll-item' style={{ fontSize: '1.4rem', margin: '2rem 0', animationDelay: '1.2s' }}>
+                  <p className='home__section-text scroll-item' style={{ fontSize: '1.4rem', margin: '1rem 0', animationDelay: '1.2s' }}>
                     ¿Nuestro Norte? Aquello que valores y que sea  importante para vos en este momento.
                   </p>
 
-                  <p className='home__section-text scroll-item' style={{ fontSize: '1.4rem', margin: '2rem 0', animationDelay: '1.7s' }}>
+                  <p className='home__section-text scroll-item' style={{ fontSize: '1.4rem', margin: '1rem 0', animationDelay: '1.7s' }}>
                     Gracias por confiar en mí, si deseas comenzar a trabajar en tu salud mental y/o  bienestar, no dudes en ponerte en <a href='/contacto'>contacto</a> conmigo.
                   </p>
                 </div>
@@ -112,55 +112,53 @@ export default function Home({ }: Props) {
             </>
             : ''}
 
-          <div className="home__section-services scroll-item"></div>
-          {renderServices ?
-            <>
-              <div className="home__section">
-                <div className="home__col">
-                  <p className="home__section-title scroll-item">Servicios</p>
-                  <div className="home__section-wrap scroll-item">
-                    <ServiceCard
-                      image={ServiceImage2}
-                      title='Psicoterapia'
-                      description='Se trata de una modalidad de Psicoterapia que permite llevar a cabo procesos Psicoterapéuticos con la misma efectividad que la modalidad presencial, añadiendo múltiples beneficios, como el ahorro de tiempo y transporte.
+          <div className="home__section">
+            <div className="home__col">
+              <p className="home__section-title scroll-item">Servicios</p>
+              <div className="home__section-services scroll-item"></div>
+              {renderServices ?
+                <div className="home__section-wrap">
+                  <ServiceCard
+                    image={ServiceImage2}
+                    title='Psicoterapia'
+                    description='Se trata de una modalidad de Psicoterapia que permite llevar a cabo procesos Psicoterapéuticos con la misma efectividad que la modalidad presencial, añadiendo múltiples beneficios, como el ahorro de tiempo y transporte.
                   Las sesiones se realizan a través de diferentes plataformas y medios digitales, como Google Meet, zoom, whatsapp, etc. 
                   '
-                      buttonLabel='Reservar'
-                      handleButton={() => history.push('/booking?service=psicologia')}
-                      delay='1.5s'
-                    />
+                    buttonLabel='Reservar'
+                    handleButton={() => history.push('/booking?service=psicologia')}
+                    delay='1.5s'
+                  />
 
-                    <ServiceCard
-                      image={ServiceImage1}
-                      title='Entrenamiento en Habilidades'
-                      description='El consultante (particular u organizacional), puede requerir el entrenamiento exclusivo en una o varias de las siguientes habilidades:
+                  <ServiceCard
+                    image={ServiceImage1}
+                    title='Entrenamiento en Habilidades'
+                    description='El consultante (particular u organizacional), puede requerir el entrenamiento exclusivo en una o varias de las siguientes habilidades:
  
                   -Habilidades de conciencia plena (Entrenamiento en Mindfulness y conexión con el momento presente)
                   -Habilidades de regulación emocional
                   -Habilidades de Efectividad Interpersonal
                   -Habilidades de aceptación radical
                   '
-                      buttonLabel='Reservar'
-                      handleButton={() => history.push('/booking?service=entrenamiento-en-habilidades')}
-                      delay='2s'
-                    />
+                    buttonLabel='Reservar'
+                    handleButton={() => history.push('/booking?service=entrenamiento-en-habilidades')}
+                    delay='2s'
+                  />
 
-                    <ServiceCard
-                      image={ServiceImage4}
-                      title='Valoraciones Neurocognitivas'
-                      description='La evaluación neuropsicológica o valoración neurocognitiva se trata de un estudio que permite determinar el estado o funcionamiento cognitivo de una persona en diferentes áreas, tales como la memoria, funciones visuoespaciales, atención, etc.
+                  <ServiceCard
+                    image={ServiceImage4}
+                    title='Valoraciones Neurocognitivas'
+                    description='La evaluación neuropsicológica o valoración neurocognitiva se trata de un estudio que permite determinar el estado o funcionamiento cognitivo de una persona en diferentes áreas, tales como la memoria, funciones visuoespaciales, atención, etc.
                   Se caracteriza por ser un estudio no invasivo, sino que su base es la aplicación de técnicas o test que brindan información no provista por otros métodos de estudio como el electroencefalograma, la tomografía computada o la resonancia magnética.
                   Es de destacar que no sólo se administra a pacientes con posible deterioro, sino que también se encuentra dirigida a personas que desean conocer su performance cognitiva (estado de su memoria, atención, etc.) en distintas etapas de la vida.
                   '
-                      buttonLabel='Reservar'
-                      handleButton={() => history.push('/booking?service=valoraciones-neurocognitivas')}
-                      delay='2.5s'
-                    />
-                  </div>
+                    buttonLabel='Reservar'
+                    handleButton={() => history.push('/booking?service=valoraciones-neurocognitivas')}
+                    delay='2.5s'
+                  />
                 </div>
-              </div>
-            </>
-            : ''}
+                : ''}
+            </div>
+          </div>
 
         </div>
       </div>

@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import InputField from '../../components/InputField/InputField'
 import { dataObj, onChangeEventType } from '../../types'
 import Dropdown from '../../components/Dropdown/Dropdown'
 import Button from '../../components/Button/Button'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { APP_COLORS, dateOptions, paisesHispanohablantes, provinciasArgentinas, timeOptions, tiposTerapias } from '../../constants'
+import { APP_COLORS, dateOptions, paisesHispanohablantes, provinciasArgentinas, services, timeOptions, tiposTerapias } from '../../constants'
 import Calendar from "react-calendar"
 import { TileDisabledFunc } from "react-calendar/dist/cjs/shared/types"
 import { AppContext } from '../../AppContext'
@@ -36,8 +36,15 @@ export default function Booking({ }: Props) {
   const [data, setData] = useState(defaultData)
   const [openCalendar, setOpenCalendar] = useState(false)
   const [booked, setBooked] = useState(false)
+  const [service, setService] = useState('')
   const history = useHistory()
   const { isMobile } = useContext(AppContext)
+  const location = useLocation()
+
+  useEffect(() => {
+    const _service = new URLSearchParams(document.location.search).get('service')
+    if (_service) setService(_service)
+  }, [location])
 
   const updateData = (key: string, e: onChangeEventType) => {
     const value = e.target.value
@@ -100,6 +107,10 @@ export default function Booking({ }: Props) {
   const checkData = () => data.fullname && data.email && data.email.includes('.')
     && data.email.includes('@') && data.date && data.fullname.includes(' ')
 
+  const getServiceName = (service: string) => {
+    return services[service]
+  }
+
   const renderNewBooking = () => {
     return (
       <div
@@ -110,7 +121,8 @@ export default function Booking({ }: Props) {
         }}
       >
         <div className="page__col booking__text-col" style={{ width: isMobile ? '90vw' : '' }}>
-          <h1>Reserva tu cita</h1>
+          <h1>{getServiceName(service)}</h1>
+          <h3 className='booking__subtitle'>Reserva tu cita</h3>
           <p className='booking__text'>
             Completa el formulario con tus datos para asegurar tu consulta. Estamos aquí para ayudarte en tu viaje hacia el bienestar emocional y mental.
           </p>
@@ -118,7 +130,7 @@ export default function Booking({ }: Props) {
         <div className="page__col">
           <div className="booking__form-container">
             <div className="booking__form" style={{ width: isMobile ? '80vw' : '' }}>
-              <h2 className='booking__form-title'>Nueva reserva</h2>
+              {/* <h2 className='booking__form-title'>Nueva reserva</h2> */}
               <InputField
                 label='Nombre completo'
                 name='fullname'
