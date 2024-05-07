@@ -125,7 +125,7 @@ export default function Home({ }: Props) {
                   Las sesiones se realizan a través de diferentes plataformas y medios digitales, como Google Meet, zoom, whatsapp, etc. 
                   '
                     buttonLabel='Reservar'
-                    handleButton={() => history.push('/booking?service=psicologia')}
+                    handleButton={() => history.push('/booking?service=psicoterapia')}
                     delay='1.5s'
                   />
 
