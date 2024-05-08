@@ -10,6 +10,8 @@ import Privacy from './pages/Privacy/Privacy';
 import Cookies from './pages/Cookies/Cookies';
 import Login from './pages/Login/Login';
 import Booking from './pages/Booking/Booking';
+import Bookings from './pages/Bookings/Bookings';
+import Services from './pages/Services/Services';
 
 function App() {
   const location = useLocation()
@@ -67,6 +69,21 @@ function App() {
         </div>
       </Route>
 
+      <Route exact path="/bookings">
+        <div className={`page__wrapper`}>
+          <Header />
+            <Bookings />
+          <Footer />
+        </div>
+      </Route>
+
+      <Route exact path="/services">
+        <div className={`page__wrapper`}>
+          <Header />
+            <Services />
+          <Footer />
+        </div>
+      </Route>
 
       <Route>
         <div className={`page__wrapper`}>

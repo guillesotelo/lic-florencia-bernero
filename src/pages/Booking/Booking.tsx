@@ -9,6 +9,7 @@ import { APP_COLORS, dateOptions, paisesHispanohablantes, provinciasArgentinas, 
 import Calendar from "react-calendar"
 import { TileDisabledFunc } from "react-calendar/dist/cjs/shared/types"
 import { AppContext } from '../../AppContext'
+import { createBooking } from '../../services'
 type Props = {}
 
 const defaultData: dataObj = {
@@ -17,7 +18,6 @@ const defaultData: dataObj = {
   phone: '',
   country: '',
   province: '',
-  therapy: '',
   age: 18,
 }
 
@@ -36,6 +36,7 @@ export default function Booking({ }: Props) {
   const [data, setData] = useState(defaultData)
   const [openCalendar, setOpenCalendar] = useState(false)
   const [booked, setBooked] = useState(false)
+  const [loading, setLOading] = useState(false)
   const [service, setService] = useState('')
   const history = useHistory()
   const { isMobile } = useContext(AppContext)
@@ -43,7 +44,9 @@ export default function Booking({ }: Props) {
 
   useEffect(() => {
     const _service = new URLSearchParams(document.location.search).get('service')
-    if (_service) setService(_service)
+    if (_service) {
+      setService(getServiceName(_service))
+    }
   }, [location])
 
   const updateData = (key: string, e: onChangeEventType) => {
@@ -55,13 +58,19 @@ export default function Booking({ }: Props) {
 
   const book = async () => {
     try {
-      // const booked = await newBooking(data)
-      const booked = true
-      if (booked) {
+      setLOading(true)
+      const bookingData = { ...data }
+      bookingData.service = service.toLocaleLowerCase().split(' ').join('-')
+      const created = await createBooking(data)
+      if (created) {
         toast.success('Reserva creada con éxito')
-        setTimeout(() => setBooked(true), 2000)
+        setTimeout(() => {
+          setBooked(true)
+          setLOading(false)
+        }, 2000)
       } else toast.error('Ocurrió un error. Intenta nuevamente.')
     } catch (error) {
+      setLOading(false)
       toast.error('Ocurrió un error. Intenta nuevamente.')
       console.error(error)
     }
@@ -121,8 +130,8 @@ export default function Booking({ }: Props) {
         }}
       >
         <div className="page__col booking__text-col" style={{ width: isMobile ? '90vw' : '' }}>
-          <h1>{getServiceName(service)}</h1>
-          <h3 className='booking__subtitle'>Reserva tu cita</h3>
+          <h1 className='booking__title'>{service}</h1>
+          <h2 className='booking__subtitle'>Reserva tu cita</h2>
           <p className='booking__text'>
             Completa el formulario con tus datos para asegurar tu consulta. Estamos aquí para ayudarte en tu viaje hacia el bienestar emocional y mental.
           </p>
@@ -181,10 +190,10 @@ export default function Booking({ }: Props) {
                 /> : ''}
               <Dropdown
                 label='Tipo de Terapia (opcional)'
-                options={tiposTerapias}
-                selected={data.therapy}
-                value={data.therapy}
-                setSelected={(value: string) => setData({ ...data, therapy: value })}
+                options={['Psicoterapia', 'Entrenamiento en Habilidades', 'Valoraciones Neurocognitivas']}
+                selected={service}
+                value={service}
+                setSelected={setService}
               />
               <div className="booking__form-datepicker">
                 {openCalendar ?
@@ -226,12 +235,13 @@ export default function Booking({ }: Props) {
                 bgColor={APP_COLORS.METAL}
                 textColor='white'
                 style={{ marginTop: '1rem' }}
-                disabled={!checkData()}
+                disabled={!checkData() || loading}
               />
               <Button
                 label='Descartar'
                 handleClick={discard}
                 style={{ marginTop: '.5rem' }}
+                disabled={loading}
               />
             </div>
           </div>

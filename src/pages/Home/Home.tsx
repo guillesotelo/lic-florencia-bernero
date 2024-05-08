@@ -112,7 +112,7 @@ export default function Home({ }: Props) {
             </>
             : ''}
 
-          <div className="home__section">
+          <div className="home__section" style={{ backgroundColor: 'white' }}>
             <div className="home__col">
               <p className="home__section-title scroll-item">Servicios</p>
               <div className="home__section-services scroll-item"></div>
@@ -126,7 +126,7 @@ export default function Home({ }: Props) {
                   '
                     buttonLabel='Reservar'
                     handleButton={() => history.push('/booking?service=psicoterapia')}
-                    delay='1.5s'
+                    delay='1s'
                   />
 
                   <ServiceCard
@@ -141,7 +141,7 @@ export default function Home({ }: Props) {
                   '
                     buttonLabel='Reservar'
                     handleButton={() => history.push('/booking?service=entrenamiento-en-habilidades')}
-                    delay='2s'
+                    delay='1.5s'
                   />
 
                   <ServiceCard
@@ -153,7 +153,7 @@ export default function Home({ }: Props) {
                   '
                     buttonLabel='Reservar'
                     handleButton={() => history.push('/booking?service=valoraciones-neurocognitivas')}
-                    delay='2.5s'
+                    delay='2s'
                   />
                 </div>
                 : ''}

@@ -1,6 +1,7 @@
 .booking {
     &__text {
         font-size: 1.2rem;
+        animation: fade-in 1s ease-in forwards;
 
         &-col {
             width: 30vw;
@@ -8,8 +9,16 @@
         }
     }
 
+    &__title {
+        animation: fade-in 1s ease-in forwards;
+        // font-weight: normal;
+    }
+
+
     &__subtitle {
         margin: 0;
+        animation: fade-in 1s ease-in forwards;
+        font-weight: normal;
     }
 
     &__form {
@@ -29,6 +38,7 @@
             box-shadow: .5rem 1rem 2rem rgba(0, 0, 0, 0.196);
             border-radius: 1rem;
             margin-bottom: 4rem;
+            animation: fade-in-up 1s ease-in forwards;
         }
 
         &-datepicker {

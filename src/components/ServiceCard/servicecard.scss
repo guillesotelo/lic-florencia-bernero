@@ -2,7 +2,7 @@
     &__container {
         height: 25rem;
         width: 15rem;
-        border: 2px solid #00000076;
+        border: 1px solid #00000053;
         border-radius: 1rem;
         transition: .3s;
         -webkit-user-select: none;
@@ -10,7 +10,7 @@
         user-select: none;
         opacity: 0;
         animation: fade-in-down 2s ease-in forwards;
-        background-color: #F9F3DC;
+        // background-color: #F9F3DC;
 
         &:hover {
             box-shadow: .5rem 1rem 2rem rgba(0, 0, 0, 0.252);
@@ -38,7 +38,7 @@
         display: -webkit-box;
         overflow: hidden;
         text-overflow: ellipsis;
-        text-align: justify;
+        text-align: left;
         -webkit-line-clamp: 6;
         -webkit-box-orient: vertical;
         margin: 0;
@@ -54,6 +54,8 @@
             height: 40%;
             overflow: hidden;
             border-radius: 1rem;
+            border: 1px solid #00000053;
+
         }
     }
 }

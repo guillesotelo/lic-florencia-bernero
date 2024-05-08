@@ -1,12 +1,50 @@
-import React from 'react'
+import React, { MouseEvent, useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo/logo.png'
 import Isologo from '../../assets/images/logo/isologo.png'
 import { useHistory } from 'react-router-dom'
+import { AppContext } from '../../AppContext'
+import User from '../../assets/icons/user.svg'
+import Bookings from '../../assets/icons/bookings.svg'
+import Services from '../../assets/icons/services.svg'
+import Exit from '../../assets/icons/exit.svg'
+import { toast } from 'react-toastify'
 
 type Props = {}
 
 export default function Header({ }: Props) {
+  const [showMenu, setShowMenu] = useState(false)
+  const [toggleMenu, setToggleMenu] = useState('--toggled')
   const history = useHistory()
+  const { isLoggedIn, setIsLoggedIn } = useContext(AppContext)
+
+  useEffect(() => {
+    const menuHandler = (e: any) => {
+      console.log(e.target.className)
+      if (!e.target.className.includes('header__menu-account')) {
+        setToggleMenu('')
+        setTimeout(() => setShowMenu(false), 500)
+      }
+      else toggleDropdown()
+    }
+    document.addEventListener('click', menuHandler)
+    return () => document.removeEventListener('click', menuHandler)
+  }, [])
+
+  const logout = () => {
+    setToggleMenu('--toggled')
+    localStorage.clear()
+    toast.info('Nos vemos pronto!')
+    setTimeout(() => {
+      setIsLoggedIn(false)
+      setShowMenu(false)
+      history.push('/')
+    }, 1000)
+  }
+
+  const toggleDropdown = () => {
+    setShowMenu(!showMenu)
+    setToggleMenu(showMenu ? '' : '--toggled')
+  }
 
   return (
     <div className="header__container">
@@ -26,9 +64,34 @@ export default function Header({ }: Props) {
             <li><a onClick={() => history.push('/cursos-online')} className='header__menu-item'>Cursos Online</a></li>
             <li><a onClick={() => history.push('/contacto')} className='header__menu-item'>Contacto</a></li>
             <li><a onClick={() => history.push('/sobre-mi')} className='header__menu-item'>Sobre mí</a></li>
+            {isLoggedIn ?
+              <li>
+                <div className="header__menu-account" onClick={toggleDropdown}>
+                  <img src={User} className='header__menu-account-svg' alt='User' draggable={false} />
+                </div>
+              </li> : ''}
+            {showMenu ?
+              <div className={`header__menu-account-drop${toggleMenu}`}>
+                <nav className="header__menu-account-drop-nav">
+                  <ul className='header__menu-account-drop-list'>
+                    <li className='header__menu-account-item' onClick={() => history.push('/bookings')}>
+                      <img src={Bookings} className='header__menu-account-item-svg' alt='Bookings' draggable={false} />
+                      <p className="header__menu-account-item-text">Bookings</p>
+                    </li>
+                    <li className='header__menu-account-item' onClick={() => history.push('/services')}>
+                      <img src={Services} className='header__menu-account-item-svg' alt='Servicios' draggable={false} />
+                      <p className="header__menu-account-item-text">Servicios</p>
+                    </li>
+                    <li className='header__menu-account-item' onClick={logout}>
+                      <img src={Exit} className='header__menu-account-item-svg' alt='Logout' draggable={false} />
+                      <p className="header__menu-account-item-text">Logout</p>
+                    </li>
+                  </ul>
+                </nav>
+              </div> : ''}
           </ul>
         </nav>
       </div>
-    </div>
+    </div >
   )
 }

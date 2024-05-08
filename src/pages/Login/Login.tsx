@@ -85,7 +85,7 @@ export default function Login({ }: Props) {
                         bgColor='lightgray'
                         textColor='black'
                         label='Volver'
-                        disabled={loading}
+                        disabled={loading || Boolean(isLoggedIn)}
                         handleClick={() => history.goBack()} />
                 </div>
             </div>

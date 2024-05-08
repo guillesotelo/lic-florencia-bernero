@@ -81,5 +81,72 @@
                 transform-origin: bottom left;
             }
         }
+
+        &-account {
+            position: relative;
+
+            &-svg {
+                height: 2rem;
+                filter: invert(47%) sepia(14%) saturate(1298%) hue-rotate(188deg) brightness(93%) contrast(86%);
+                cursor: pointer;
+
+                &:hover {
+                    opacity: .7;
+                }
+            }
+
+            &-item {
+                cursor: pointer;
+                transition: .2s;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 1rem;
+
+                &-text {
+                    font-size: 1rem;
+                    color: #6575A8;
+                    margin: .8rem 0;
+                }
+
+                &-svg {
+                    height: 1.5rem;
+                filter: invert(47%) sepia(14%) saturate(1298%) hue-rotate(188deg) brightness(93%) contrast(86%);
+            }
+
+                &:hover {
+                    opacity: .7;
+                    transform: translateX(1%);
+                }
+            }
+
+            &-drop {
+                top: 10vh;
+                right: 0;
+                position: absolute;
+                display: flex;
+                flex-direction: column;
+                    background-color: white;
+                animation: fade-out-menu .5s ease-in forwards;
+                box-shadow: -17px 26px 76px -48px rgba(0, 0, 0, 0.75);
+
+                &-list {
+                    padding: 0;
+                    margin: 1rem 2rem;
+                    width: fit-content;
+                }
+
+                &--toggled {
+                    top: 10vh;
+                    right: 0;
+                    position: absolute;
+                    display: flex;
+                    flex-direction: column;
+                    background-color: white;
+                    animation: fade-in-menu .5s ease-in forwards;
+                    box-shadow: -17px 26px 76px -48px rgba(0, 0, 0, 0.75);
+                }
+            }
+        }
     }
 }

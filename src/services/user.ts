@@ -1,74 +1,67 @@
 import axios from 'axios';
-import { userType } from '../types';
-import { getUser } from '../helpers';
 
-const API_URL = process.env.NODE_ENV === 'development' ? '' : process.env.REACT_APP_API_URL || ''
+const API_URL = process.env.NODE_ENV === 'development' ? '' : process.env.REACT_APP_API_URL
 
 const getHeaders = () => {
-    return { authorization: `Bearer ${getUser().token}` }
+    const { token }: { [key: string | number]: any } = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '{}') : {}
+    return { authorization: `Bearer ${token}` }
 }
-
 const getConfig = () => {
-    return { headers: { authorization: `Bearer ${getUser().token}` } }
+    const { token }: { [key: string | number]: any } = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '{}') : {}
+    return { headers: { authorization: `Bearer ${token}` } }
 }
 
-const loginUser = async (user: userType) => {
+const loginUser = async (user: { [key: string | number]: any }) => {
     try {
         const res = await axios.post(`${API_URL}/api/user/login`, user)
         const finalUser = res.data
         localStorage.setItem('user', JSON.stringify({
             ...finalUser,
-            app: 'Down@Volvo',
+            app: 'angelita',
             login: new Date()
         }))
         return finalUser
     } catch (error) { console.log(error) }
 }
 
-const verifyToken = async () => {
+const verifyToken = async ()=> {
     try {
-        const loggedUser = getUser()
-        if (loggedUser.email) {
-            const verify = await axios.post(`${API_URL}/api/user/verify`, loggedUser, getConfig())
-            return verify.data
-        }
-        return null
+        const verify = await axios.post(`${API_URL}/api/user/verify`, {}, getConfig())
+        return verify.data
     } catch (err) { }
 }
 
-const registerUser = async (data: userType) => {
+const registerUser = async (data: { [key: string | number]: any }) => {
     try {
-        const newUser = await axios.post(`${API_URL}/api/user/create`, { ...data, user: getUser() }, getConfig())
+        const newUser = await axios.post(`${API_URL}/api/user/create`, data)
         return newUser.data
     } catch (err) { console.error(err) }
 }
 
-const getAllUsers = async () => {
+const subscribe = async (data: { [key: string | number]: any }) => {
     try {
-        const users = await axios.get(`${API_URL}/api/user/getAll`, { headers: getHeaders() })
-        return users.data
-    } catch (err) { console.log(err) }
-}
-
-const updateUser = async (data: userType) => {
-    try {
-        const updated = await axios.post(`${API_URL}/api/user/update`, { ...data, user: getUser() }, getConfig())
-        const localUser = JSON.parse(localStorage.getItem('user') || '{}')
-        if (updated.data._id === localUser._id) {
-            localStorage.setItem('user', JSON.stringify({
-                ...localUser,
-                ...updated.data
-            }))
-        }
-        return updated.data
+        const newEmail = await axios.post(`${API_URL}/api/app/subscribe`, data)
+        return newEmail.data
     } catch (err) { console.error(err) }
 }
 
-const deleteUser = async (data: userType) => {
+const cancelSubscription = async (data: { [key: string | number]: any }) => {
     try {
-        const deleted = await axios.post(`${API_URL}/api/user/remove`, { ...data, user: getUser() }, getConfig())
-        return deleted.data
-    } catch (err) { console.log(err) }
+        const canceled = await axios.post(`${API_URL}/api/app/cancelSubscription`, data)
+        return canceled.data
+    } catch (err) { console.error(err) }
+}
+
+const updateUser = async (data: { [key: string | number]: any }) => {
+    try {
+        const user = await axios.post(`${API_URL}/api/user/update`, data, getConfig())
+        const localUser = JSON.parse(localStorage.getItem('user') || '{}')
+        localStorage.setItem('user', JSON.stringify({
+            ...localUser,
+            ...user.data
+        }))
+        return user.data
+    } catch (err) { console.error(err) }
 }
 
 export {
@@ -76,6 +69,6 @@ export {
     verifyToken,
     registerUser,
     updateUser,
-    getAllUsers,
-    deleteUser
+    subscribe,
+    cancelSubscription
 }

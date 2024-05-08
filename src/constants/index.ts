@@ -103,3 +103,46 @@ export const timeOptions: Intl.DateTimeFormatOptions = {
     hour: '2-digit',
     minute: '2-digit',
 }
+
+export const bookingHeaders = [
+    {
+        name: 'FECHA',
+        value: 'createdAt'
+    },
+    {
+        name: 'SERVICIO',
+        value: 'service'
+    },
+    {
+        name: 'NOMBRE COMPLETO',
+        value: 'fullname'
+    },
+    {
+        name: 'PRECIO',
+        value: 'price'
+    },
+    {
+        name: 'PAGO CONFIRMADO',
+        value: 'isPaid'
+    },
+]
+
+
+export const serviceHeaders = [
+    {
+        name: 'NOMBRE',
+        value: 'name'
+    },
+    {
+        name: 'TITULO',
+        value: 'title'
+    },
+    {
+        name: 'PRECIO',
+        value: 'price'
+    },
+    {
+        name: 'ES EVENTO',
+        value: 'isEvent'
+    },
+]
