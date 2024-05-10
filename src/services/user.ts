@@ -17,7 +17,7 @@ const loginUser = async (user: { [key: string | number]: any }) => {
         const finalUser = res.data
         localStorage.setItem('user', JSON.stringify({
             ...finalUser,
-            app: 'angelita',
+            app: 'lic-fb',
             login: new Date()
         }))
         return finalUser

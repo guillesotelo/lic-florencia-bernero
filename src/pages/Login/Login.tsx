@@ -28,6 +28,7 @@ export default function Login({ }: Props) {
 
     const login = async () => {
         try {
+            setLoading(true)
             const logged = await loginUser(data)
             if (logged) {
                 setIsLoggedIn(true)
