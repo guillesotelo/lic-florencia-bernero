@@ -111,8 +111,8 @@
 
                 &-svg {
                     height: 1.5rem;
-                filter: invert(47%) sepia(14%) saturate(1298%) hue-rotate(188deg) brightness(93%) contrast(86%);
-            }
+                    filter: invert(47%) sepia(14%) saturate(1298%) hue-rotate(188deg) brightness(93%) contrast(86%);
+                }
 
                 &:hover {
                     opacity: .7;
@@ -126,7 +126,7 @@
                 position: absolute;
                 display: flex;
                 flex-direction: column;
-                    background-color: white;
+                background-color: white;
                 animation: fade-out-menu .5s ease-in forwards;
                 box-shadow: -17px 26px 76px -48px rgba(0, 0, 0, 0.75);
 

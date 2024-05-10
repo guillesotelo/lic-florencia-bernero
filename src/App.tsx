@@ -9,7 +9,7 @@ import Footer from './components/Footer/Footer';
 import Privacy from './pages/Privacy/Privacy';
 import Cookies from './pages/Cookies/Cookies';
 import Login from './pages/Login/Login';
-import Booking from './pages/Booking/Booking';
+import NewBooking from './pages/NewBooking/NewBooking';
 import Bookings from './pages/Bookings/Bookings';
 import Services from './pages/Services/Services';
 
@@ -61,10 +61,10 @@ function App() {
       </Route>
 
 
-      <Route exact path="/booking">
+      <Route exact path="/new-booking">
         <div className={`page__wrapper`}>
           <Header />
-            <Booking />
+            <NewBooking />
           <Footer />
         </div>
       </Route>

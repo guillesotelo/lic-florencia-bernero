@@ -19,8 +19,7 @@ export default function Header({ }: Props) {
 
   useEffect(() => {
     const menuHandler = (e: any) => {
-      console.log(e.target.className)
-      if (!e.target.className.includes('header__menu-account')) {
+      if (e.target.className !== 'header__menu-account-svg') {
         setToggleMenu('')
         setTimeout(() => setShowMenu(false), 500)
       }

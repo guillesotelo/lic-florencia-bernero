@@ -103,10 +103,10 @@ export default function Dropdown(props: Props) {
             }}
             ref={selectRef}
             onClick={() => setOpenDrop(!openDrop)}>
-            <h4 className={`dropdown__selected`}>
+            <p className={`dropdown__selected`}>
                 {getSelectValue()}
-            </h4>
-            < h4 className={`dropdown__selected`}>▾</h4>
+            </p>
+            < p className={`dropdown__selected`}>▾</p>
         </div>
     }
 
@@ -127,7 +127,7 @@ export default function Dropdown(props: Props) {
             }}
             ref={selectRef}
             onClick={() => setOpenDrop(!openDrop)}>
-            <h4
+            <div
                 className={`dropdown__selected`}
                 style={{
                     height: multiselect ? 'fit-content' : '',
@@ -138,9 +138,9 @@ export default function Dropdown(props: Props) {
                         <p className='dropdown__selected-multi-label'>{val}</p>
                         <p className='dropdown__selected-multi-remove' onClick={() => removeItem(i)}>X</p>
                     </span>
-                ) : <h4 style={{ padding: 0 }} className={`dropdown__selected`}>Select</h4>}
-            </h4>
-            < h4 className={`dropdown__selected`}>▾</h4>
+                ) : <p style={{ padding: 0 }} className={`dropdown__selected`}>Select</p>}
+            </div>
+            < p className={`dropdown__selected`}>▾</p>
         </div>
     }
 
@@ -151,7 +151,7 @@ export default function Dropdown(props: Props) {
             ref={optionsRef}>
             {options.length ?
                 options.map((option: any, i: number) =>
-                    <h4
+                    <p
                         key={i}
                         className={`dropdown__option`}
                         onClick={() => {
@@ -167,9 +167,9 @@ export default function Dropdown(props: Props) {
                         {isDate ? new Date(option).toLocaleDateString(locale || 'sv-SE') :
                             isTime ? new Date(option).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) :
                                 objKey ? option[objKey] : option}
-                    </h4>)
+                    </p>)
                 :
-                <h4 className={`dropdown__option`} style={{ borderTop: 'none' }}>Loading...</h4>
+                <p className={`dropdown__option`} style={{ borderTop: 'none' }}>Loading...</p>
             }
         </div>
     }
@@ -177,14 +177,14 @@ export default function Dropdown(props: Props) {
     const renderLoading = () => {
         return (
             <div className={`dropdown__select`}>
-                <h4
+                <p
                     className={`dropdown__selected`}
                     style={{
                         height: multiselect ? 'fit-content' : '',
                         flexWrap: multiselect ? 'wrap' : 'unset',
                     }}>
                     <BeatLoader color='lightgray' size='1rem' />
-                </h4>
+                </p>
             </div >
         )
     }
@@ -192,7 +192,7 @@ export default function Dropdown(props: Props) {
     const renderMultiSelect = () => {
         return (
             <div className={`dropdown__container`} style={dropdownStyles}>
-                {label ? <h4 className={`dropdown__label`}>{label}</h4> : ''}
+                {label ? <p className={`dropdown__label`}>{label}</p> : ''}
                 <div ref={dropRef} className={`dropdown__select-section`}>
                     {loading ? renderLoading() : renderSelectedItems()}
                     {openDrop ? renderDropDownOptions() : ''}
@@ -204,7 +204,7 @@ export default function Dropdown(props: Props) {
     const renderSimpleSelect = () => {
         return (
             <div className={`dropdown__container`} style={dropdownStyles}>
-                {label ? <h4 className={`dropdown__label`}>{label}</h4> : ''}
+                {label ? <p className={`dropdown__label`}>{label}</p> : ''}
                 <div ref={dropRef} className={`dropdown__select-section`}>
                     {loading ? renderLoading() : renderSelectedItem()}
                     {openDrop ? renderDropDownOptions() : ''}

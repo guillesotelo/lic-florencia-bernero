@@ -185,29 +185,41 @@
         display: block;
         opacity: 0;
         top: 10vh;
-        transform: translateY(-100%);
+        transform: translateX(100%);
+    }
+
+    50% {
+        display: block;
+        opacity: 0;
+        top: 10vh;
+        transform: translateX(100%);
     }
 
     100% {
         opacity: 1;
-        transform: translateY(0%);
+        transform: translateX(0%);
     }
 }
 
 @keyframes fade-out-menu {
     0% {
         opacity: 1;
-        transform: translateY(0%);
+        transform: translateX(0%);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateX(0%);
     }
 
     99% {
         opacity: 0;
-        transform: translateY(-100%);
+        transform: translateX(100%);
     }
 
     100% {
         opacity: 0;
-        transform: translateY(-100%);
+        transform: translateX(100%);
         display: none;
     }
 }

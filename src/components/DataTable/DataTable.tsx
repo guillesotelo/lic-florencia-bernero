@@ -94,8 +94,8 @@ export default function DataTable(props: Props) {
     }
 
     const loadingText = () => {
-        return loadingTime > 3 ? <h4>This is taking a little longer than expected...</h4>
-            : <h4>{`Cargando ${name || 'datos'}...`}</h4>
+        return loadingTime > 3 ? <p>This is taking a little longer than expected...</p>
+            : <p>{`Cargando ${name || 'datos'}...`}</p>
     }
 
     const reorder = (list: dataObj[], startIndex: number, endIndex: number) => {
@@ -134,13 +134,13 @@ export default function DataTable(props: Props) {
     const renderHeaders = () => {
         return <div className={`datatable__headers`}>
             {tableHeaders.map((header: dataObj, i: number) =>
-                <h4
+                <p
                     key={i}
                     className={`datatable__header`}
                     onClick={() => orderBy(header)}
                     style={{ width: `${100 / tableHeaders.length}%` }}>
                     {header.name} {Object.keys(ordered).includes(header.name) ? ordered[header.name] ? `▼` : `▲` : ''}
-                </h4>
+                </p>
             )}
         </div>
     }
@@ -158,7 +158,7 @@ export default function DataTable(props: Props) {
                         animationDelay: `${((i || 1) + (maxItems > 10 ? (max || 10) - maxItems : maxItems)) / 30}s`
                     }}>
                     {tableHeaders.map((header: dataObj, j: number) =>
-                        <h4
+                        <p
                             key={j}
                             className={`datatable__row-item datatable__row-${header.value}`}
                             style={{
@@ -176,7 +176,7 @@ export default function DataTable(props: Props) {
                                                 typeof row[header.value] === 'number' ? row[header.value] :
                                                     row && row[header.value] ? String(row[header.value])
                                                         : '--'}
-                        </h4>
+                        </p>
                     )}
                 </div>
             )}
@@ -212,7 +212,7 @@ export default function DataTable(props: Props) {
                                                     animationDelay: `${((i || 1) + (maxItems > 10 ? (max || 10) - maxItems : maxItems)) / 30}s`
                                                 }}>
                                                 {tableHeaders.map((header: dataObj, j: number) =>
-                                                    <h4
+                                                    <p
                                                         key={j}
                                                         className={`datatable__row-item datatable__row-${header.value}`}
                                                         style={{
@@ -230,7 +230,7 @@ export default function DataTable(props: Props) {
                                                                             typeof row[header.value] === 'number' ? row[header.value] :
                                                                                 row && row[header.value] ? String(row[header.value])
                                                                                     : '--'}
-                                                    </h4>
+                                                    </p>
                                                 )}
                                             </div>
                                         </div>
@@ -255,7 +255,7 @@ export default function DataTable(props: Props) {
     return (
         <div className={`datatable__container`} style={style}>
             <div className='datatable__titles'>
-                <h4 className='datatable__title'>{title || ''}</h4>
+                <p className='datatable__title'>{title || ''}</p>
             </div>
             {renderHeaders()}
             {loading ? renderLoading() :
