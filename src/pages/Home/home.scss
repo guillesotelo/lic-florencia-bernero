@@ -1,6 +1,7 @@
 .home {
     &__container {
         background-color: #F9F3DC;
+        position: relative;
     }
 
     &__col {
@@ -95,7 +96,7 @@
         }
 
         &-title {
-            font-size: 6vw;
+            font-size: 6rem;
             margin: 0;
             opacity: 0;
             animation: fade-in-down 2s ease forwards;
@@ -133,6 +134,28 @@
                 position: absolute;
                 z-index: 1;
             }
+        }
+    }
+
+    &__whatsapp {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 4;
+
+        &-img {
+            height: 3rem;
+            animation: fade-in-whatsapp 2s ease-in-out forwards;
+            cursor: pointer;
+            transition: .2s;
+
+            &:hover {
+                filter: brightness(120%);
+            }
+        }
+
+        &-box {
+            animation: fade-in-up 2s ease-in-out forwards;
         }
     }
 }

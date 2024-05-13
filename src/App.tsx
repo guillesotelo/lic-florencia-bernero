@@ -12,6 +12,7 @@ import Login from './pages/Login/Login';
 import NewBooking from './pages/NewBooking/NewBooking';
 import Bookings from './pages/Bookings/Bookings';
 import Services from './pages/Services/Services';
+import About from './pages/About/About';
 
 function App() {
   const location = useLocation()
@@ -81,6 +82,14 @@ function App() {
         <div className={`page__wrapper`}>
           <Header />
             <Services />
+          <Footer />
+        </div>
+      </Route>
+
+      <Route exact path="/sobre-mi">
+        <div className={`page__wrapper`}>
+          <Header />
+            <About />
           <Footer />
         </div>
       </Route>

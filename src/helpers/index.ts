@@ -104,3 +104,8 @@ export const parsePrice = (amount: number) => {
     })
     return `$ ${amountString.split('').reverse().join('')}`
 }
+
+export const parseMessageUri = (msg: string) => {
+    if (msg) return encodeURIComponent(msg)
+    return msg
+}

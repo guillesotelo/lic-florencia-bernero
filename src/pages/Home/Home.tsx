@@ -9,12 +9,15 @@ import ServiceImage1 from '../../assets/images/site/services/1.png'
 import ServiceImage2 from '../../assets/images/site/services/2.png'
 import ServiceImage3 from '../../assets/images/site/services/3.png'
 import ServiceImage4 from '../../assets/images/site/services/4.png'
+import Whatsapp from '../../assets/icons/whatsapp.svg'
+import { parseMessageUri } from '../../helpers'
 
 type Props = {}
 
 export default function Home({ }: Props) {
   const [renderIntro, setRenderIntro] = useState(false)
   const [renderServices, setRenderServices] = useState(false)
+  const [showWhatsapp, setShowWhatsapp] = useState(false)
   const history = useHistory()
   const { isMobile } = useContext(AppContext)
 
@@ -39,7 +42,19 @@ export default function Home({ }: Props) {
         }
       })
     })
+
+    setTimeout(() => setShowWhatsapp(true), 3000)
   }, [])
+
+  const whatsappMe = () => {
+    const message = 'Hola Florencia! Me gustaría ponerme en contacto contigo para conocer más sobre tus servicios.'
+    const phoneNumber = 5493468649280
+
+    const a = document.createElement('a')
+    a.href = `https://wa.me/${phoneNumber}?text=${parseMessageUri(message || '')}`
+    a.target = '_blank'
+    a.click()
+  }
 
   const renderDesktop = () => {
     return (
@@ -160,6 +175,11 @@ export default function Home({ }: Props) {
             </div>
           </div>
 
+          {showWhatsapp ?
+            <div className="home__whatsapp">
+              <img src={Whatsapp} alt="Whatsapp Me" onClick={whatsappMe} className="home__whatsapp-img" />
+            </div>
+            : ''}
         </div>
       </div>
     )
