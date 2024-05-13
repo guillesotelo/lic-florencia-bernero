@@ -114,7 +114,7 @@ export default function Booking({ }: Props) {
         if (selected !== -1) {
             setData(bookings[selected])
             setBookingSelected(bookings[selected])
-            setDate(bookings[selected].date ? JSON.parse(bookings[selected].date || '') : null)
+            setDate(bookings[selected].date || null)
             setSelectedDates(bookings[selected].dateObjects ? JSON.parse(bookings[selected].dateObjects || '').map((date: string) => new Date(date)) : [])
             setQuantity(`${bookings[selected].realQty} ${bookings[selected].realQty === 1 ? 'sesión' : 'sesiones'}`)
             setIsPaid(bookings[selected].isPaid ? 'Si' : 'No')
