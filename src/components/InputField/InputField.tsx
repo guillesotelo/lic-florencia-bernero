@@ -8,12 +8,13 @@ type Props = {
     type?: string
     label?: string
     placeholder?: string
-    value?: string | number | null
+    value: string | number | readonly string[] | undefined
     cols?: number
     rows?: number
     style?: React.CSSProperties
     disabled?: boolean
     onSubmit?: () => void
+    resize?: 'vertical' | 'horizontal' | 'both'
 }
 
 export default function InputField(props: Props) {
@@ -31,7 +32,8 @@ export default function InputField(props: Props) {
         rows,
         style,
         disabled,
-        onSubmit
+        onSubmit,
+        resize
     } = props
 
     useEffect(() => {
@@ -57,10 +59,11 @@ export default function InputField(props: Props) {
                 className={className || `textarea__default`}
                 placeholder={placeholder || ''}
                 onChange={e => updateData ? updateData(name, e) : null}
-                value={value || undefined}
+                value={value}
                 cols={cols}
                 rows={rows}
                 disabled={disabled}
+                style={{ resize: resize || 'none' }}
             />
         </div>
         :
@@ -71,7 +74,7 @@ export default function InputField(props: Props) {
                 className={className || `inputfield__default`}
                 placeholder={placeholder || ''}
                 onChange={e => updateData ? updateData(name, e) : null}
-                value={value || undefined}
+                value={value}
                 disabled={disabled}
             />
         </div>

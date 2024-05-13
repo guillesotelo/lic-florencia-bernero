@@ -145,6 +145,10 @@ export const serviceHeaders = [
         name: 'ES EVENTO',
         value: 'isEvent'
     },
+    {
+        name: 'DÁS',
+        value: 'day'
+    },
 ]
 
 export const eventHeaders = [
@@ -173,3 +177,5 @@ export const eventHeaders = [
         value: 'price'
     },
 ]
+
+export const weekDays = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']

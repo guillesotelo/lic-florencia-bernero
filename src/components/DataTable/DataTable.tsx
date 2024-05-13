@@ -3,7 +3,7 @@ import MoonLoader from "react-spinners/MoonLoader"
 import { dataObj } from '../../types'
 import { AppContext } from '../../AppContext'
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
-import { getDate } from '../../helpers';
+import { getDate, parsePrice } from '../../helpers';
 
 type Props = {
     tableData: dataObj[]
@@ -169,13 +169,14 @@ export default function DataTable(props: Props) {
                             }}>
                             {(header.value === 'createdAt' || header.value === 'updatedAt' || header.value === 'start' || header.value === 'end')
                                 && row[header.value] ? `${getDate(row[header.value])}` :
-                                header.value === 'active' || header.value === 'isSuper' ? row[header.value] ? 'Yes' : 'No' :
+                                header.value === 'active' || header.value === 'isSuper' || header.value === 'isEvent' ? row[header.value] ? 'Si' : 'No' :
                                     header.value === 'createdBy' ? row[header.value] ? `User: ${row[header.value]}` : 'App' :
                                         header.value === 'status' ? typeof row[header.value] === 'string' ? row[header.value] : row[header.value] ? 'UP' : 'DOWN' :
-                                            header.value === 'message' ? row.userAlert && row[header.value] ? row[header.value] : row['message'] || '--' :
-                                                typeof row[header.value] === 'number' ? row[header.value] :
-                                                    row && row[header.value] ? String(row[header.value])
-                                                        : '--'}
+                                            header.value === 'price' ? parsePrice(row[header.value]) :
+                                                header.value === 'message' ? row.userAlert && row[header.value] ? row[header.value] : row['message'] || '--' :
+                                                    typeof row[header.value] === 'number' ? row[header.value] :
+                                                        row && row[header.value] ? String(row[header.value])
+                                                            : '--'}
                         </p>
                     )}
                 </div>
@@ -223,13 +224,14 @@ export default function DataTable(props: Props) {
                                                         }}>
                                                         {(header.value === 'createdAt' || header.value === 'updatedAt' || header.value === 'start' || header.value === 'end')
                                                             && row[header.value] ? `${getDate(row[header.value])}` :
-                                                            header.value === 'active' || header.value === 'isSuper' ? row[header.value] ? 'Yes' : 'No' :
+                                                            header.value === 'active' || header.value === 'isSuper' || header.value === 'isEvent' ? row[header.value] ? 'Si' : 'No' :
                                                                 header.value === 'createdBy' ? row[header.value] ? `User: ${row[header.value]}` : 'App' :
                                                                     header.value === 'status' ? row[header.value] ? 'UP' : 'DOWN' :
-                                                                        header.value === 'message' ? row.userAlert && row[header.value] ? row[header.value] : row['message'] || '--' :
-                                                                            typeof row[header.value] === 'number' ? row[header.value] :
-                                                                                row && row[header.value] ? String(row[header.value])
-                                                                                    : '--'}
+                                                                        header.value === 'price' ? parsePrice(row[header.value]) :
+                                                                            header.value === 'message' ? row.userAlert && row[header.value] ? row[header.value] : row['message'] || '--' :
+                                                                                typeof row[header.value] === 'number' ? row[header.value] :
+                                                                                    row && row[header.value] ? String(row[header.value])
+                                                                                        : '--'}
                                                     </p>
                                                 )}
                                             </div>

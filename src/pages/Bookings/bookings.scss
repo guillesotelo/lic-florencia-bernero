@@ -12,9 +12,9 @@
 
     &__title {
         margin: 0 0 2rem 0;
-        text-align: center;
+        // text-align: center;
         width: 100%;
-        font-size: 1.5rem;
+        // font-size: 1.5rem;
         font-weight: normal;
     }
 
@@ -79,8 +79,8 @@
     }
 
     &__sidebar {
-        margin: -7vh -1.5rem 0 0;
-        position: absolute;
+        margin: 7vh 0 0;
+        position: fixed;
         right: 0;
         top: 0;
         background-color: white;
@@ -121,8 +121,8 @@
     }
 
     &__sidebar-event {
-        margin: -7vh -1.5rem 0 0;
-        position: absolute;
+        margin: 7vh 0 0;
+        position: fixed;
         right: 0;
         top: 0;
         background-color: white;
@@ -130,8 +130,8 @@
         width: 38vw;
         border-left: 1px solid lightgray;
         padding: 2rem;
-        overflow-y: auto;
         overflow-x: hidden;
+        overflow-y: auto;
 
         &-title {
             font-size: 1rem;

@@ -125,7 +125,7 @@ export default function Home({ }: Props) {
                   Las sesiones se realizan a través de diferentes plataformas y medios digitales, como Google Meet, zoom, whatsapp, etc. 
                   '
                     buttonLabel='Reservar'
-                    handleButton={() => history.push('/booking?service=psicoterapia')}
+                    handleButton={() => history.push('/new-booking?service=psicoterapia')}
                     delay='1s'
                   />
 
@@ -140,7 +140,7 @@ export default function Home({ }: Props) {
                   -Habilidades de aceptación radical
                   '
                     buttonLabel='Reservar'
-                    handleButton={() => history.push('/booking?service=entrenamiento-en-habilidades')}
+                    handleButton={() => history.push('/new-booking?service=entrenamiento-en-habilidades')}
                     delay='1.5s'
                   />
 
@@ -152,7 +152,7 @@ export default function Home({ }: Props) {
                   Es de destacar que no sólo se administra a pacientes con posible deterioro, sino que también se encuentra dirigida a personas que desean conocer su performance cognitiva (estado de su memoria, atención, etc.) en distintas etapas de la vida.
                   '
                     buttonLabel='Reservar'
-                    handleButton={() => history.push('/booking?service=valoraciones-neurocognitivas')}
+                    handleButton={() => history.push('/new-booking?service=valoraciones-neurocognitivas')}
                     delay='2s'
                   />
                 </div>

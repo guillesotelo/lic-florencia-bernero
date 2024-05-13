@@ -6,7 +6,7 @@ import { BeatLoader } from 'react-spinners'
 type Props = {
     label: string
     options: string[] | number[] | dataObj[]
-    value?: string | number | dataObj
+    value: string | number | dataObj
     objKey?: string | number
     selected: any
     setSelected: (value: any) => void
@@ -85,11 +85,11 @@ export default function Dropdown(props: Props) {
 
     const getSelectValue = () => {
         if (value && typeof value === 'string' || typeof value === 'number') {
-            if (isDate) return value ? new Date(value).toLocaleDateString(locale || 'sv-SE') : 'Select'
+            if (isDate) return value ? new Date(value).toLocaleDateString(locale || 'sv-SE') : 'Seleccionar'
             if (isTime) return new Date(value).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             else return value
         }
-        return objKey && selected && selected[objKey] ? selected[objKey] : 'Select'
+        return objKey && selected && selected[objKey] ? selected[objKey] : 'Seleccionar'
     }
 
     const renderSelectedItem = () => {
@@ -138,7 +138,7 @@ export default function Dropdown(props: Props) {
                         <p className='dropdown__selected-multi-label'>{val}</p>
                         <p className='dropdown__selected-multi-remove' onClick={() => removeItem(i)}>X</p>
                     </span>
-                ) : <p style={{ padding: 0 }} className={`dropdown__selected`}>Select</p>}
+                ) : <p style={{ padding: 0 }} className={`dropdown__selected`}>Seleccionar</p>}
             </div>
             < p className={`dropdown__selected`}>▾</p>
         </div>

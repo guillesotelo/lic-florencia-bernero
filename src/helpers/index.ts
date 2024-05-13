@@ -94,3 +94,13 @@ export const updateData = (key: string, e: onChangeEventType, data: dataObj, set
     const value = e.target.value
     setData({ ...data, [key]: value })
 }
+
+export const parsePrice = (amount: number) => {
+    if (!amount) return ''
+    let amountString = ''
+    String(amount).split('').reverse().forEach((letter, i) => {
+        if (i !== 0 && i % 3 === 0) amountString += `,`
+        amountString += `${letter}`
+    })
+    return `$ ${amountString.split('').reverse().join('')}`
+}

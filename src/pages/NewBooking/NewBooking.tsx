@@ -5,11 +5,11 @@ import Dropdown from '../../components/Dropdown/Dropdown'
 import Button from '../../components/Button/Button'
 import { useHistory, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { APP_COLORS, dateOptions, paisesHispanohablantes, provinciasArgentinas, services, timeOptions, tiposTerapias } from '../../constants'
+import { APP_COLORS, dateOptions, paisesHispanohablantes, provinciasArgentinas, services, timeOptions, tiposTerapias, weekDays } from '../../constants'
 import Calendar from "react-calendar"
 import { TileDisabledFunc } from "react-calendar/dist/cjs/shared/types"
 import { AppContext } from '../../AppContext'
-import { createBooking } from '../../services'
+import { createBooking, getAllServices } from '../../services'
 type Props = {}
 
 const defaultData: dataObj = {
@@ -38,6 +38,8 @@ export default function Booking({ }: Props) {
   const [booked, setBooked] = useState(false)
   const [loading, setLOading] = useState(false)
   const [service, setService] = useState('')
+  const [allServices, setAllServices] = useState<any[]>([])
+  const [serviceData, setServiceData] = useState<dataObj>({})
   const history = useHistory()
   const { isMobile } = useContext(AppContext)
   const location = useLocation()
@@ -47,7 +49,15 @@ export default function Booking({ }: Props) {
     if (_service) {
       setService(getServiceName(_service))
     }
+    getServices()
   }, [location])
+
+  useEffect(() => {
+    if (service) {
+      const selected = allServices.find(s => s.name === service)
+      if (selected && selected._id) setServiceData(selected)
+    }
+  }, [allServices, service])
 
   const updateData = (key: string, e: onChangeEventType) => {
     const value = e.target.value
@@ -76,6 +86,15 @@ export default function Booking({ }: Props) {
     }
   }
 
+  const getServices = async () => {
+    try {
+      const services = await getAllServices()
+      if (services && services.length) setAllServices(services)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   const getAges = () => Array.from({ length: 103 }).map((_, i) => i + 18)
 
   const tileDisabled: TileDisabledFunc = ({ activeStartDate, date, view }): boolean => {
@@ -92,15 +111,13 @@ export default function Booking({ }: Props) {
         count++
       }
     })
-
-    return isTodayOrBefore || day === 6 || day === 0
-    // if (serviceDay.toLowerCase().includes('lunes')) return day !== 1 || isTodayOrBefore || count > 1
-    // if (serviceDay.toLowerCase().includes('martes')) return day !== 2 || isTodayOrBefore || count > 1
-    // if (serviceDay.toLowerCase().includes('miércoles')) return day !== 3 || isTodayOrBefore || count > 1
-    // if (serviceDay.toLowerCase().includes('jueves')) return day !== 4 || isTodayOrBefore || count > 1
-    // if (serviceDay.toLowerCase().includes('viernes')) return day !== 5 || isTodayOrBefore || count > 1
-    // if (serviceDay.toLowerCase().includes('sábado')) return day !== 6 || isTodayOrBefore || count > 1
-    // if (serviceDay.toLowerCase().includes('domingo')) return day !== 7 || isTodayOrBefore || count > 1
+    const serviceDays = (serviceData.day || '').toLowerCase()
+    let disabled = [0, 1, 2, 3, 4, 5, 6]
+    weekDays.map((weekday: string, i) => {
+      if (serviceDays.includes(weekday.toLowerCase())) disabled = disabled.filter(n => n !== i)
+    })
+    if (serviceDays) return disabled.includes(day) || isTodayOrBefore || count > 1
+    return false
   }
 
   const getTimeOptions = () => {
@@ -225,6 +242,7 @@ export default function Booking({ }: Props) {
                       objKey='label'
                       style={{ width: '45%', marginLeft: '.5rem' }}
                       disabled={!data.date}
+                      maxHeight='20vh'
                     />
                   </>
                 }
