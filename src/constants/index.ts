@@ -14,12 +14,6 @@ export const APP_COLORS = {
     TEXT: '#393939',
 }
 
-export const services: { [key: string]: string } = {
-    'psicoterapia': 'Psicoterapia',
-    'entrenamiento-en-habilidades': 'Entrenamiento en Habilidades',
-    'valoraciones-neurocognitivas': 'Valoraciones Neurocognitivas',
-}
-
 export const provinciasArgentinas = [
     "Buenos Aires",
     "Catamarca",

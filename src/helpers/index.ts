@@ -70,7 +70,7 @@ export const getDate = (dateString: Date | number | string | undefined) => {
     if (dateString) {
         const date = new Date(dateString)
         if (date.getHours() === 24) date.setHours(0)
-        return date.toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+        return date.toLocaleDateString('es-ES', {  day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })
     }
 }
 
@@ -108,4 +108,16 @@ export const parsePrice = (amount: number) => {
 export const parseMessageUri = (msg: string) => {
     if (msg) return encodeURIComponent(msg)
     return msg
+}
+
+export const scrollToSection = (section: string) => {
+    setTimeout(() => {
+        const element = document.getElementById(section)
+        console.log(element)
+        if (element) element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' })
+    }, 300)
+}
+
+export const getTime = (date: Date | string | number) => {
+    return new Date(date).toLocaleString('ES-es', { hour: '2-digit', minute: '2-digit' })
 }

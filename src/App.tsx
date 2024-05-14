@@ -13,6 +13,7 @@ import NewBooking from './pages/NewBooking/NewBooking';
 import Bookings from './pages/Bookings/Bookings';
 import Services from './pages/Services/Services';
 import About from './pages/About/About';
+import Contact from './pages/Contact/Contact';
 
 function App() {
   const location = useLocation()
@@ -90,6 +91,14 @@ function App() {
         <div className={`page__wrapper`}>
           <Header />
             <About />
+          <Footer />
+        </div>
+      </Route>
+
+      <Route exact path="/contacto">
+        <div className={`page__wrapper`}>
+          <Header />
+            <Contact />
           <Footer />
         </div>
       </Route>

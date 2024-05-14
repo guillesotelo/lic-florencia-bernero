@@ -15,13 +15,15 @@ type Props = {
 export default function Button({ label, handleClick, className, bgColor, textColor, disabled, svg, style }: Props) {
     const [buttonStyle, setButtonStyle] = useState<React.CSSProperties>({ ...style })
 
+    const hoverColor = bgColor && bgColor !== 'transparent' ? bgColor : 'gray'
+
     return svg ?
         <div
             className="button__icon"
             onClick={handleClick}
             style={{
-                backgroundColor: bgColor || '#eeeeee',
-                border: `1px solid ${bgColor || '#eeeeee'}`,
+                backgroundColor: bgColor || 'transparent',
+                border: `1px solid ${bgColor || 'transparent'}`,
                 color: textColor || 'black',
                 opacity: disabled ? '.3' : '',
                 padding: '.2vw',
@@ -37,8 +39,8 @@ export default function Button({ label, handleClick, className, bgColor, textCol
             onMouseEnter={() => setButtonStyle({
                 ...style,
                 backgroundColor: 'transparent',
-                color: bgColor || 'black',
-                border: `1px solid ${bgColor || 'lightgray'}`
+                color: hoverColor,
+                border: `1px solid ${hoverColor}`
             })}
             onMouseLeave={() => setButtonStyle({
                 ...style,
@@ -54,8 +56,8 @@ export default function Button({ label, handleClick, className, bgColor, textCol
             className={className || 'button__default'}
             onClick={handleClick}
             style={{
-                backgroundColor: bgColor || '#eeeeee',
-                border: `1px solid ${bgColor || '#eeeeee'}`,
+                backgroundColor: bgColor || 'transparent',
+                border: `1px solid ${bgColor || 'transparent'}`,
                 color: textColor || 'black',
                 opacity: disabled ? '.3' : '',
                 cursor: disabled ? 'not-allowed' : '',
@@ -65,12 +67,12 @@ export default function Button({ label, handleClick, className, bgColor, textCol
             onMouseEnter={() => setButtonStyle({
                 ...style,
                 backgroundColor: 'transparent',
-                color: bgColor || 'black',
-                border: `1px solid ${bgColor || 'lightgray'}`
+                color: hoverColor,
+                border: `1px solid ${hoverColor}`
             })}
             onMouseLeave={() => setButtonStyle({
                 ...style,
-                backgroundColor: bgColor || '#eeeeee',
+                backgroundColor: bgColor || 'transparent',
                 color: textColor || 'black',
             })}
         >

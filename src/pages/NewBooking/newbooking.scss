@@ -48,4 +48,34 @@
             justify-content: space-between;
         }
     }
+
+    &__confirmed {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+
+        &-service {
+            margin: 0;
+        }
+    }
+
+    &__ok {
+        height: 3rem;
+    }
+
+    &__price-list {
+        display: flex;
+        flex-direction: column;
+        margin: 2rem 0;
+        gap: 1rem;
+    }
+
+    &__price-item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0;
+    }
 }

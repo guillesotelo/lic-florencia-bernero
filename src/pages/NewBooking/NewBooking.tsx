@@ -5,11 +5,14 @@ import Dropdown from '../../components/Dropdown/Dropdown'
 import Button from '../../components/Button/Button'
 import { useHistory, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { APP_COLORS, dateOptions, paisesHispanohablantes, provinciasArgentinas, services, timeOptions, tiposTerapias, weekDays } from '../../constants'
+import { APP_COLORS, dateOptions, paisesHispanohablantes, timeOptions, weekDays } from '../../constants'
 import Calendar from "react-calendar"
 import { TileDisabledFunc } from "react-calendar/dist/cjs/shared/types"
 import { AppContext } from '../../AppContext'
-import { createBooking, getAllServices } from '../../services'
+import { createBooking, getAllBookings, getAllServices } from '../../services'
+import Ok from '../../assets/icons/ok.svg'
+import { useReactToPrint } from "react-to-print"
+import { getDate, parsePrice } from '../../helpers'
 type Props = {}
 
 const defaultData: dataObj = {
@@ -17,7 +20,7 @@ const defaultData: dataObj = {
   email: '',
   phone: '',
   country: '',
-  province: '',
+  city: '',
   age: 18,
 }
 
@@ -26,8 +29,8 @@ const parseData: dataObj = {
   email: 'Email',
   phone: 'Teléfono',
   country: 'País de residencia',
-  province: 'Provincia',
-  therapy: 'Tipo de Terapia',
+  city: 'Ciudad',
+  service: 'Tipo de Terapia',
   age: 'Edad',
   date: 'Fecha y hora'
 }
@@ -36,51 +39,78 @@ export default function Booking({ }: Props) {
   const [data, setData] = useState(defaultData)
   const [openCalendar, setOpenCalendar] = useState(false)
   const [booked, setBooked] = useState(false)
-  const [loading, setLOading] = useState(false)
-  const [service, setService] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [service, setService] = useState<dataObj>({})
+  const [serviceName, setServiceName] = useState('')
   const [allServices, setAllServices] = useState<any[]>([])
-  const [serviceData, setServiceData] = useState<dataObj>({})
+  const [openCalendars, setOpenCalendars] = useState<any>({})
+  const [selectedDates, setSelectedDates] = useState<any>([])
+  const [bookings, setBookings] = useState<any[]>([])
+  const [quantity, setQuantity] = useState(1)
+  const [hideButtons, setHideButtons] = useState(false)
   const history = useHistory()
   const { isMobile } = useContext(AppContext)
   const location = useLocation()
+  const printRef = React.useRef(null)
+
+  const reactToPrintContent = React.useCallback(() => {
+    return printRef.current
+  }, [printRef.current])
 
   useEffect(() => {
     const _service = new URLSearchParams(document.location.search).get('service')
     if (_service) {
-      setService(getServiceName(_service))
+      setServiceName(_service.replaceAll('-', ' '))
     }
     getServices()
+    getBookings()
   }, [location])
 
   useEffect(() => {
-    if (service) {
-      const selected = allServices.find(s => s.name === service)
-      if (selected && selected._id) setServiceData(selected)
+    if (serviceName) {
+      const selected = allServices.find(s => s.name === serviceName)
+      if (selected && selected._id) setService(selected)
     }
-  }, [allServices, service])
+  }, [allServices, serviceName])
+
+  useEffect(() => {
+    setOpenCalendars({})
+  }, [selectedDates])
 
   const updateData = (key: string, e: onChangeEventType) => {
     const value = e.target.value
     setData({ ...data, [key]: value })
   }
 
+  const getBookings = async () => {
+    setLoading(true)
+    try {
+      const _bookings = await getAllBookings()
+      if (_bookings && Array.isArray(_bookings)) setBookings(_bookings)
+      setLoading(false)
+    } catch (error) {
+      console.error(error)
+      setLoading(false)
+    }
+  }
+
   const discard = () => history.goBack()
 
   const book = async () => {
     try {
-      setLOading(true)
-      const bookingData = { ...data }
-      bookingData.service = service.toLocaleLowerCase().split(' ').join('-')
-      const created = await createBooking(data)
+      setLoading(true)
+      const bookingData = { ...service, ...data }
+      bookingData.service = service
+      const created = await createBooking(bookingData)
       if (created) {
         toast.success('Reserva creada con éxito')
         setTimeout(() => {
           setBooked(true)
-          setLOading(false)
+          setLoading(false)
         }, 2000)
       } else toast.error('Ocurrió un error. Intenta nuevamente.')
     } catch (error) {
-      setLOading(false)
+      setLoading(false)
       toast.error('Ocurrió un error. Intenta nuevamente.')
       console.error(error)
     }
@@ -89,7 +119,10 @@ export default function Booking({ }: Props) {
   const getServices = async () => {
     try {
       const services = await getAllServices()
-      if (services && services.length) setAllServices(services)
+      if (services && services.length) {
+        setService(services[0])
+        setAllServices(services)
+      }
     } catch (err) {
       console.error(err)
     }
@@ -111,7 +144,7 @@ export default function Booking({ }: Props) {
         count++
       }
     })
-    const serviceDays = (serviceData.day || '').toLowerCase()
+    const serviceDays = (service.day || '').toLowerCase()
     let disabled = [0, 1, 2, 3, 4, 5, 6]
     weekDays.map((weekday: string, i) => {
       if (serviceDays.includes(weekday.toLowerCase())) disabled = disabled.filter(n => n !== i)
@@ -130,11 +163,63 @@ export default function Booking({ }: Props) {
       })
   }
 
-  const checkData = () => data.fullname && data.email && data.email.includes('.')
-    && data.email.includes('@') && data.date && data.fullname.includes(' ')
+  const checkData = () => data.fullname && data.fullname.includes(' ')
+    && data.email && data.email.includes('.')
+    && data.email.includes('@') && selectedDates.length
 
-  const getServiceName = (service: string) => {
-    return services[service]
+  const handlePrint = 
+    useReactToPrint({
+      content: reactToPrintContent,
+      documentTitle: "AwesomeFileName",
+      onAfterPrint: () => toast.success('Reserva Impresa'),
+      onBeforeGetContent: () => setHideButtons(true),
+      removeAfterPrint: true
+    })
+
+  const getQuantityOptions = () => {
+    return Array.from({ length: 20 })
+      .map((_, i) => i === 0 ? `${i + 1} sesión` : `${i + 1} sesiones`)
+  }
+
+  const handleDateChange = (value: any, index: number): void => {
+    if (value instanceof Date) {
+      const updatedDates = [...selectedDates]
+      const mapDates = updatedDates.map(date => new Date(date).toLocaleDateString())
+      const dateVal = new Date(value).toLocaleDateString()
+
+      if (!mapDates.includes(dateVal) || mapDates.indexOf(dateVal) === index) updatedDates[index] = value
+      setSelectedDates(updatedDates)
+    }
+  }
+
+  const getBookingSlots = (date: Date, start: number | null = null, end: number | null = null) => {
+    const timeSlots = []
+    const unavailableTime = getBookedSlots(bookings, true)
+    const startTime = new Date(date)
+    const endTime = new Date(date)
+    startTime.setHours(start || data.startTime || 9, 0, 0, 0)
+    endTime.setHours(end || data.endTime || 18, 0, 0, 0)
+    const step = 60 * 60 * 1000
+
+    for (let currentTime = startTime; currentTime <= endTime; currentTime.setTime(currentTime.getTime() + step)) {
+      const freeSlot = new Date(currentTime)
+      if (!unavailableTime.includes(freeSlot.getTime())) timeSlots.push(freeSlot)
+    }
+    return timeSlots
+  }
+
+  const getBookedSlots = (bookingArray: any[], miliseconds = false) => {
+    let slots: any[] = []
+    bookingArray.forEach((booking: any) => {
+      if (booking.dateObjects) {
+        const dateObjs = JSON.parse(booking.dateObjects || '[]')
+        dateObjs.forEach((date: any) => {
+          slots.push(miliseconds ? new Date(date).getTime() : new Date(date))
+        })
+      }
+      else if (booking.date) slots.push(miliseconds ? new Date(booking.date).getTime() : new Date(booking.date))
+    })
+    return slots
   }
 
   const renderNewBooking = () => {
@@ -147,7 +232,7 @@ export default function Booking({ }: Props) {
         }}
       >
         <div className="page__col booking__text-col" style={{ width: isMobile ? '90vw' : '' }}>
-          <h1 className='booking__title'>{service}</h1>
+          <h1 className='booking__title'>{serviceName}</h1>
           <h2 className='booking__subtitle'>Reserva tu cita</h2>
           <p className='booking__text'>
             Completa el formulario con tus datos para asegurar tu consulta. Estamos aquí para ayudarte en tu viaje hacia el bienestar emocional y mental.
@@ -182,6 +267,7 @@ export default function Booking({ }: Props) {
                 selected={data.age}
                 value={data.age}
                 setSelected={(value: number) => setData({ ...data, age: value })}
+                maxHeight='20vh'
               />
               <Dropdown
                 label='País de residencia'
@@ -189,63 +275,88 @@ export default function Booking({ }: Props) {
                 selected={data.country}
                 value={data.country}
                 setSelected={(value: string) => setData({ ...data, country: value })}
+                maxHeight='20vh'
               />
-              {data.country ? data.country === 'Argentina' ?
-                <Dropdown
-                  label='Provincia de residencia'
-                  options={provinciasArgentinas}
-                  selected={data.province}
-                  value={data.province}
-                  setSelected={(value: string) => setData({ ...data, province: value })}
-                />
-                :
+              {data.country && (data.country === 'Otro' || !paisesHispanohablantes.includes(data.country)) ?
                 <InputField
-                  label='Provincia o estado'
-                  name='province'
-                  value={data.province}
+                  label='Especificar país de residencia'
+                  name='country'
+                  value={data.country === 'Otro' ? '' : data.country}
                   updateData={updateData}
                 /> : ''}
+              <InputField
+                label='Ciudad de residencia'
+                name='city'
+                value={data.city}
+                updateData={updateData}
+              />
               <Dropdown
-                label='Tipo de Terapia (opcional)'
-                options={['Psicoterapia', 'Entrenamiento en Habilidades', 'Valoraciones Neurocognitivas']}
+                label='Tipo de Terapia'
+                options={allServices}
                 selected={service}
                 value={service}
                 setSelected={setService}
+                maxHeight='20vh'
+                objKey='name'
+              />
+              <Dropdown
+                label='Sesiones'
+                options={getQuantityOptions()}
+                selected={quantity}
+                value={quantity}
+                setSelected={val => setQuantity(val.split(' ')[0])}
+                maxHeight='20vh'
               />
               <div className="booking__form-datepicker">
-                {openCalendar ?
-                  <Calendar
-                    locale='es'
-                    onChange={(value: any) => {
-                      setData({ ...data, date: new Date(new Date(value.setHours(12)).setMinutes(0)) })
-                      setOpenCalendar(false)
-                    }}
-                    value={data.date}
-                    tileDisabled={tileDisabled}
-                    className='react-calendar'
-                  />
-                  :
-                  <>
-                    <Button
-                      label={data.date ? new Date(data.date).toLocaleString('es-ES', dateOptions) : 'Seleccionar fecha'}
-                      handleClick={() => setOpenCalendar(!openCalendar)}
-                      bgColor={APP_COLORS.METAL}
-                      textColor='white'
-                      style={{ marginTop: '1rem', width: '50%' }}
-                    />
-                    <Dropdown
-                      label=''
-                      options={getTimeOptions()}
-                      selected={data.date}
-                      value={data.date ? new Date(data.date).toLocaleString('es-ES', timeOptions) : 'Seleccionar hora'}
-                      setSelected={(item: dataObj) => setData({ ...data, date: item.value })}
-                      objKey='label'
-                      style={{ width: '45%', marginLeft: '.5rem' }}
-                      disabled={!data.date}
-                      maxHeight='20vh'
-                    />
-                  </>
-                }
+                <div className="booking__various-dates">
+                  {Array.from({ length: quantity }).map((_, i) =>
+                    <div
+                      key={i}
+                      className="booking__various-dates-item"
+                      style={{
+                        width: '100%'
+                      }}
+                    >
+                      <h4 className="booking__various-dates-item-label">{i + 1}</h4>
+                      {openCalendars[i] ?
+                        <Calendar
+                          locale='es'
+                          onChange={(date) => handleDateChange(date, i)}
+                          value={selectedDates[i]}
+                          tileDisabled={tileDisabled}
+                          className='react-calendar calendar-fixed'
+                        />
+                        :
+                        <div className='booking__date-time'>
+                          <Button
+                            label={selectedDates[i] ? getDate(selectedDates[i]) : 'Seleccionar fecha'}
+                            handleClick={() => setOpenCalendars({ ...openCalendars, [i]: true })}
+                            bgColor="#B0BCEB"
+                            style={{ width: 'fit-content' }}
+                          />
+                          <Dropdown
+                            label='Seleccionar hora'
+                            options={getBookingSlots(selectedDates[i])}
+                            selected={selectedDates[i]}
+                            setSelected={(date) => handleDateChange(date, i)}
+                            value={selectedDates[i]}
+                            isTime={true}
+                            maxHeight='10rem'
+                          />
+                        </div>
+                      }
+                    </div>)}
+                </div>
+              </div>
+              <div className="booking__price-list">
+                <p className="booking__price-item">
+                  <span>Precio de la sesión</span>
+                  <span>{parsePrice(service.price)}</span>
+                </p>
+                <h3 className="booking__price-item">
+                  <span>Total</span>
+                  <span>{parsePrice(service.price * quantity)}</span>
+                </h3>
               </div>
               <Button
                 label='Reservar'
@@ -275,23 +386,39 @@ export default function Booking({ }: Props) {
         style={{
           flexDirection: isMobile ? 'column' : 'row',
           margin: isMobile ? '2rem 1rem' : '',
-        }}>
+        }}
+        ref={printRef}>
         <div className="page__col booking__text-col" style={{ width: 'fit-content', margin: 0 }}>
-          <h1>Cita confirmada!</h1>
+          <div className='booking__confirmed'>
+            <h1>Cita confirmada!</h1>
+            <img src={Ok} alt="" className="booking__ok" />
+          </div>
           <p className='booking__text'>
             Estos son los datos de tu reserva:
           </p>
-          <p className='booking__text'>
+          <h2 className='booking__confirmed-service'>{serviceName}</h2>
+          <div className='booking__text'>
             {Object.keys(data).map((key: string, i) => <p key={i}><strong>{parseData[key]}: </strong>
               {data[key] instanceof Date ?
                 new Date(data[key]).toLocaleString('es-ES', dateOptions) + ', ' + new Date(data[key]).toLocaleString('es-ES', timeOptions)
                 : data[key]}</p>)}
-          </p>
-          <Button
-            label='Listo'
-            bgColor={APP_COLORS.METAL}
-            textColor='white'
-            handleClick={() => history.push('/')} />
+            <p style={{ marginTop: '3rem' }}><strong>Precio por sesión: </strong>{parsePrice(service.price)}</p>
+            <p><strong>Precio final: </strong>{parsePrice(service.price * quantity)}</p>
+          </div>
+          {hideButtons ? '' :
+            <>
+              <Button
+                label='Imprimir'
+                bgColor={APP_COLORS.ATOMIC}
+                textColor='black'
+                handleClick={handlePrint}
+                style={{ margin: '1rem 0' }} />
+              <Button
+                label='Listo'
+                bgColor={APP_COLORS.METAL}
+                textColor='white'
+                handleClick={() => history.push('/')} />
+            </>}
         </div>
       </div>
     )

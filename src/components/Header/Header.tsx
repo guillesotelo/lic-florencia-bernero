@@ -77,7 +77,7 @@ export default function Header({ }: Props) {
                       <img src={Bookings} className='header__menu-account-item-svg' alt='Bookings' draggable={false} />
                       <p className="header__menu-account-item-text">Bookings</p>
                     </li>
-                    <li className='header__menu-account-item' onClick={() => history.push('/services')}>
+                    <li className='header__menu-account-item' onClick={() => history.push('/bookings?view=Servicios')}>
                       <img src={Services} className='header__menu-account-item-svg' alt='Servicios' draggable={false} />
                       <p className="header__menu-account-item-text">Servicios</p>
                     </li>

@@ -9,6 +9,7 @@ type Props = {
     buttonLabel?: string
     handleButton: () => any
     delay?: string
+    handleReadMore: () => any
 }
 
 export default function ServiceCard(props: Props) {
@@ -19,6 +20,7 @@ export default function ServiceCard(props: Props) {
         description,
         buttonLabel,
         handleButton,
+        handleReadMore,
         delay
     } = props
 
@@ -37,6 +39,14 @@ export default function ServiceCard(props: Props) {
                     label={buttonLabel}
                     handleClick={handleButton}
                     bgColor='#F7A072'
+                    style={{ width: '100%', borderRadius: '.7rem' }}
+                />
+
+                <Button
+                    label='Leer más'
+                    handleClick={handleReadMore}
+                    bgColor='transparent'
+                    textColor='#F7A072'
                     style={{ width: '100%', borderRadius: '.7rem' }}
                 />
             </div>

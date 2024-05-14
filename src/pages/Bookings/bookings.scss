@@ -62,6 +62,30 @@
         }
     }
 
+    &__various-dates {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        gap: 1rem;
+
+        &-item {
+            border: 1px solid lightgray;
+            border-radius: 1rem;
+            padding: .5rem;
+            &-label {
+                margin: 0;
+            }
+        }
+    }
+
+    &__date-time {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
     &__btns {
         display: flex;
         flex-direction: row;
