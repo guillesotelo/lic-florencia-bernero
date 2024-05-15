@@ -2,7 +2,7 @@
     &__container {
         height: 30vh;
         width: 100%;
-        background-color: #e8e8e8;
+        background-color: #6575A8;
         color: rgb(70, 70, 70);
         display: flex;
         flex-direction: row;
@@ -26,6 +26,7 @@
             &-item {
                 cursor: pointer;
                 transition: .2s;
+                color: #fff;
 
                 &:hover {
                     opacity: .5;
@@ -42,7 +43,8 @@
             height: 2rem;
             cursor: pointer;
             transition: .2s;
-            opacity: .5;
+            opacity: .7;
+            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(131deg) brightness(103%) contrast(101%);
 
             &:hover {
                 opacity: 1;

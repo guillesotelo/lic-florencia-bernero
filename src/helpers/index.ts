@@ -114,8 +114,8 @@ export const scrollToSection = (section: string) => {
     setTimeout(() => {
         const element = document.getElementById(section)
         console.log(element)
-        if (element) element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' })
-    }, 300)
+        if (element) element.scrollIntoView({  block: 'start', inline: 'start' })
+    }, 200)
 }
 
 export const getTime = (date: Date | string | number) => {
