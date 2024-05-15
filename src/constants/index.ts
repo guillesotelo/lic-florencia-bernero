@@ -100,7 +100,7 @@ export const timeOptions: Intl.DateTimeFormatOptions = {
 
 export const bookingHeaders = [
     {
-        name: 'FECHA',
+        name: 'CREADO',
         value: 'createdAt'
     },
     {
@@ -110,6 +110,10 @@ export const bookingHeaders = [
     {
         name: 'NOMBRE COMPLETO',
         value: 'fullname'
+    },
+    {
+        name: 'CIUDAD',
+        value: 'city'
     },
     {
         name: 'PRECIO UNITARIO',
@@ -128,6 +132,10 @@ export const bookingHeaders = [
 
 export const serviceHeaders = [
     {
+        name: 'CREADO',
+        value: 'createdAt'
+    },
+    {
         name: 'NOMBRE',
         value: 'name'
     },
@@ -140,12 +148,20 @@ export const serviceHeaders = [
         value: 'price'
     },
     {
-        name: 'ES EVENTO',
-        value: 'isEvent'
-    },
-    {
         name: 'DÁS',
         value: 'days'
+    },
+    {
+        name: 'APERTURA',
+        value: 'startTime'
+    },
+    {
+        name: 'CIERRE',
+        value: 'endTime'
+    },
+    {
+        name: 'ES EVENTO',
+        value: 'isEvent'
     },
 ]
 

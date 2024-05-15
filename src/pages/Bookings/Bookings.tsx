@@ -170,6 +170,8 @@ export default function Booking({ }: Props) {
         localStorage.setItem('bookingView', view)
         discardChanges()
         setDbServiceSelected(-1)
+        setIsNewService(false)
+        setIsNewEvent(false)
     }, [view])
 
     const verifyUser = async () => {
