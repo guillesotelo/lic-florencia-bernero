@@ -11,6 +11,7 @@ import ServiceImage3 from '../../assets/images/site/services/3.png'
 import ServiceImage4 from '../../assets/images/site/services/4.png'
 import Whatsapp from '../../assets/icons/whatsapp.svg'
 import { parseMessageUri } from '../../helpers'
+import WhatsappChat from '../../components/WhatsappChat/WhatsappChat'
 
 type Props = {}
 
@@ -18,8 +19,10 @@ export default function Home({ }: Props) {
   const [renderIntro, setRenderIntro] = useState(false)
   const [renderServices, setRenderServices] = useState(false)
   const [showWhatsapp, setShowWhatsapp] = useState(false)
+  const [showChat, setShowChat] = useState(false)
   const history = useHistory()
   const { isMobile } = useContext(AppContext)
+  const message = 'Hola Florencia! Me gustaría ponerme en contacto contigo para conocer más sobre tus servicios.'
 
   useEffect(() => {
     window.addEventListener('scroll', function () {
@@ -47,7 +50,7 @@ export default function Home({ }: Props) {
   }, [])
 
   const whatsappMe = () => {
-    const message = 'Hola Florencia! Me gustaría ponerme en contacto contigo para conocer más sobre tus servicios.'
+    return setShowChat(true)
     const phoneNumber = 5493468649280
 
     const a = document.createElement('a')
@@ -182,7 +185,11 @@ export default function Home({ }: Props) {
 
           {showWhatsapp ?
             <div className="home__whatsapp">
-              <img src={Whatsapp} alt="Whatsapp Me" onClick={whatsappMe} className="home__whatsapp-img" />
+              {showChat ?
+                <WhatsappChat onClose={() => setShowChat(false)} message={message} />
+                :
+                <img src={Whatsapp} alt="Whatsapp Me" onClick={whatsappMe} className="home__whatsapp-img" />
+              }
             </div>
             : ''}
         </div>
