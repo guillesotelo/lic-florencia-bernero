@@ -63,13 +63,17 @@ export default function Home({ }: Props) {
           <div className="home__landing">
             <div className="home__landing-text">
               <div className="home__landing-text-col">
-                <h1 className="home__landing-title">Equilibrio<br />y Superación</h1>
-                <h2 className="home__landing-subtitle">Psicología y entrenamiento en habilidades</h2>
-                <div style={{ textAlign: 'center', width: '94vw' }}>
+                <div>
+                  <h1 className="home__landing-title">Equilibrio<br />y Superación</h1>
+                  <h2 className="home__landing-subtitle">Psicología y entrenamiento en habilidades</h2>
+                </div>
+              </div>
+              <div className="home__landing-text-col">
+                <div style={{ textAlign: 'center' }}>
                   <p className='home__landing-cta'>Tu primer paso hacia una vida mejor</p>
                   <Button
                     label='Reserva una cita'
-                    handleClick={() => history.push('/booking')}
+                    handleClick={() => history.push('/new-booking')}
                     style={{
                       fontSize: '1.2rem',
                       height: 'fit-content',
@@ -81,8 +85,6 @@ export default function Home({ }: Props) {
                     bgColor={APP_COLORS.HONEYDEW}
                   />
                 </div>
-              </div>
-              <div className="home__landing-text-col" style={{ textAlign: 'left', alignItems: 'center' }}>
               </div>
             </div>
             <div className="home__landing-img-gradient" />

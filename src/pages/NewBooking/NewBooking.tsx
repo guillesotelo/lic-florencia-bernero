@@ -12,7 +12,7 @@ import { AppContext } from '../../AppContext'
 import { createBooking, getAllBookings, getAllServices } from '../../services'
 import Ok from '../../assets/icons/ok.svg'
 import { useReactToPrint } from "react-to-print"
-import { getDate, parsePrice } from '../../helpers'
+import { getAges, getDate, parsePrice } from '../../helpers'
 type Props = {}
 
 const defaultData: dataObj = {
@@ -134,8 +134,6 @@ export default function Booking({ }: Props) {
       console.error(err)
     }
   }
-
-  const getAges = () => Array.from({ length: 103 }).map((_, i) => i + 18)
 
   const tileDisabled: TileDisabledFunc = ({ activeStartDate, date, view }): boolean => {
     const day = date.getDay()

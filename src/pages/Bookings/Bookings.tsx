@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import DataTable from '../../components/DataTable/DataTable'
 import { dataObj } from '../../types'
-import { bookingHeaders, eventHeaders, serviceHeaders, timeOptions, weekDays } from '../../constants'
+import { bookingHeaders, eventHeaders, paisesHispanohablantes, serviceHeaders, timeOptions, weekDays } from '../../constants'
 import { createBooking, createService, deleteBooking, deleteService, getAllBookings, getAllServices, updateBooking, updateService, verifyToken } from '../../services'
 import InputField from '../../components/InputField/InputField'
 import Button from '../../components/Button/Button'
@@ -18,7 +18,7 @@ import 'moment/locale/es'
 import { createEvent, deleteEvent, getAllEvents, updateEvent } from '../../services/event'
 import Switch from '../../components/Switch/Switch'
 import Meet from '../../assets/icons/google-meet.svg'
-import { getDate, parseDateTime, parsePrice } from '../../helpers'
+import { getAges, getDate, parseDateTime, parsePrice } from '../../helpers'
 import Modal from '../../components/Modal/Modal'
 
 type Props = {}
@@ -90,6 +90,7 @@ export default function Booking({ }: Props) {
     const [selectedDays, setSelectedDays] = useState<string[]>([])
     const [bookingServiceSelected, setBookingServiceSelected] = useState<dataObj>({})
     const history = useHistory()
+    const location = useLocation()
     const { isMobile, isLoggedIn } = useContext(AppContext)
 
     useEffect(() => {
@@ -97,13 +98,15 @@ export default function Booking({ }: Props) {
     }, [isLoggedIn])
 
     useEffect(() => {
+        const _view = new URLSearchParams(document.location.search).get('view')
+        if (_view) setView(_view)
+    }, [location])
+
+    useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         getBookings()
         getServices()
         getEvents()
-
-        const _view = new URLSearchParams(document.location.search).get('view')
-        if (_view) setView(_view)
     }, [])
 
     useEffect(() => {
@@ -147,16 +150,8 @@ export default function Booking({ }: Props) {
     }, [eventSelected])
 
     useEffect(() => {
-        if (isNewBooking) {
-            setTotalPrice(getPrice())
-            setSelectedDates([])
-            setDate(null)
-            modalBehaviour()
-            setEventClicked({})
-            setData(bookingSelected)
-            setQuantity('1 sesión')
-        }
-    }, [bookingSelected, quantity])
+        setTotalPrice(getPrice())
+    }, [isNewBooking, bookingServiceSelected, quantity])
 
     useEffect(() => {
         setOpenCalendar(false)
@@ -627,24 +622,58 @@ export default function Booking({ }: Props) {
                                     <h2 className="booking__data-label">Servicio</h2>
                                     <h2 className="booking__data-value">{data.serviceName}</h2>
                                 </div>}
-                            <div className="booking__no-edit-data">
-                                <h2 className="booking__data-label">Precio unitario</h2>
-                                <h2 className="booking__data-value">{parsePrice(data.price)}</h2>
-                            </div>
                             <InputField
                                 label='Nombre completo'
-                                name="fullname"
+                                name='fullname'
+                                value={data.fullname}
                                 updateData={updateData}
-                                value={data.fullname || ''}
                             />
                             <InputField
-                                label='País de residencia'
-                                name="country"
+                                label='Email'
+                                name='email'
+                                value={data.email}
                                 updateData={updateData}
-                                value={data.country || ''}
+                            />
+                            <InputField
+                                label='Teléfono (opcional)'
+                                name='phone'
+                                value={data.phone}
+                                updateData={updateData}
+                                placeholder='+549-1234-5678'
                             />
                             <Dropdown
-                                label='Cantidad'
+                                label='Edad'
+                                options={getAges()}
+                                selected={data.age}
+                                value={data.age}
+                                setSelected={(value: number) => setData({ ...data, age: value })}
+                                maxHeight='20vh'
+                            />
+                            <Dropdown
+                                label='País de residencia'
+                                options={paisesHispanohablantes}
+                                selected={data.country}
+                                value={data.country}
+                                setSelected={(value: string) => setData({ ...data, country: value })}
+                                maxHeight='20vh'
+                            />
+                            {data.country && (data.country === 'Otro' || !paisesHispanohablantes.includes(data.country)) ?
+                                <InputField
+                                    label='Especificar país de residencia'
+                                    name='country'
+                                    value={data.country === 'Otro' ? '' : data.country}
+                                    updateData={updateData}
+                                /> : ''}
+                            <InputField
+                                label='Ciudad de residencia'
+                                name='city'
+                                value={data.city}
+                                updateData={updateData}
+                            />
+                        </div>
+                        <div className="booking__col">
+                            <Dropdown
+                                label='Cantidad de sesiones (horas)'
                                 options={getQuantityOptions()}
                                 setSelected={setQuantity}
                                 selected={quantity}
@@ -690,46 +719,32 @@ export default function Booking({ }: Props) {
                                         }
                                     </div>)}
                             </div>
-                        </div>
-                        <div className="booking__col">
                             <div className="booking__no-edit-data">
-                                <h2 className="booking__data-label">Agenda</h2>
-                                <h2 className="booking__data-value">{data.date ? getDate(data.date)
-                                    : selectedDates.map((date: Date) => getDate(date)).join(' - ')
-                                }</h2>
+                                <h2 className="booking__data-label">Precio unitario</h2>
+                                <h2 className="booking__data-value">{parsePrice(isNewBooking ? bookingServiceSelected.price : data.price)}</h2>
                             </div>
-                            <Dropdown
-                                label='Pago confirmado'
-                                options={['Si', 'No']}
-                                selected={isPaid}
-                                setSelected={setIsPaid}
-                                value={isPaid}
-                            />
-                            <InputField
-                                label='Correo electrónico'
-                                name="email"
-                                updateData={updateData}
-                                value={data.email || ''}
-                            />
-                            <InputField
-                                label='Teléfono'
-                                name="phone"
-                                updateData={updateData}
-                                value={data.phone || ''}
-                            />
                             <div className="booking__no-edit-data">
-                                <h2 className="booking__data-label">{isNewBooking ? 'Precio final' : data.isPaid ? 'Monto registrado' : 'Monto total'}</h2>
+                                <h2 className="booking__data-label">{isNewBooking ? 'Precio final' : data.isPaid ? 'Precio pagado' : 'Precio total'}</h2>
                                 <h2 className="booking__data-value">{isNewBooking ? parsePrice(totalPrice) : parsePrice(data.totalPrice)}</h2>
                             </div>
-                            {!isNewBooking ?
-                                <Switch
-                                    label='Enviar email con cambios'
-                                    on='Si'
-                                    off='No'
-                                    value={sendEmail}
-                                    setValue={setSendEmail}
+                            <div className="booking__row">
+                                <Dropdown
+                                    label='Pago confirmado'
+                                    options={['Si', 'No']}
+                                    selected={isPaid}
+                                    setSelected={setIsPaid}
+                                    value={isPaid}
                                 />
-                                : ''}
+                                {!isNewBooking ?
+                                    <Switch
+                                        label='Enviar email con cambios'
+                                        on='Si'
+                                        off='No'
+                                        value={sendEmail}
+                                        setValue={setSendEmail}
+                                    />
+                                    : ''}
+                            </div>
                         </div>
                     </div>
                 }

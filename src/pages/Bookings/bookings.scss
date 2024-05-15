@@ -76,7 +76,7 @@
             padding: .5rem;
 
             &-label {
-                margin: 0;
+                margin: 0 -1rem -1rem 0;
             }
         }
     }
@@ -93,7 +93,7 @@
     &__btns {
         display: flex;
         flex-direction: row;
-        gap: 2rem;
+        gap: 1rem;
         margin-top: 2rem;
     }
 
