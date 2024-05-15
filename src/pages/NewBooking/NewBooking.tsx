@@ -41,7 +41,6 @@ export default function Booking({ }: Props) {
   const [booked, setBooked] = useState(false)
   const [loading, setLoading] = useState(false)
   const [service, setService] = useState<dataObj>({})
-  const [serviceName, setServiceName] = useState('')
   const [allServices, setAllServices] = useState<any[]>([])
   const [openCalendars, setOpenCalendars] = useState<any>({})
   const [selectedDates, setSelectedDates] = useState<any>([])
@@ -58,20 +57,17 @@ export default function Booking({ }: Props) {
   }, [printRef.current])
 
   useEffect(() => {
-    const _service = new URLSearchParams(document.location.search).get('service')
-    if (_service) {
-      setServiceName(_service.replaceAll('-', ' '))
-    }
     getServices()
     getBookings()
-  }, [location])
+  }, [])
 
   useEffect(() => {
-    if (serviceName) {
-      const selected = allServices.find(s => s.name === serviceName)
+    if (allServices && allServices.length) {
+      const id = new URLSearchParams(document.location.search).get('serviceId')
+      const selected = allServices.find(s => s._id === id)
       if (selected && selected._id) setService(selected)
     }
-  }, [allServices, serviceName])
+  }, [allServices])
 
   useEffect(() => {
     setOpenCalendars({})
@@ -99,9 +95,16 @@ export default function Booking({ }: Props) {
   const book = async () => {
     try {
       setLoading(true)
-      const bookingData = { ...service, ...data }
-      bookingData.service = service
+
+      const bookingData = {
+        ...service,
+        ...data,
+        serviceId: service._id,
+        service: JSON.stringify(service)
+      }
+
       const created = await createBooking(bookingData)
+
       if (created) {
         toast.success('Reserva creada con éxito')
         setTimeout(() => {
@@ -109,6 +112,7 @@ export default function Booking({ }: Props) {
           setLoading(false)
         }, 2000)
       } else toast.error('Ocurrió un error. Intenta nuevamente.')
+
     } catch (error) {
       setLoading(false)
       toast.error('Ocurrió un error. Intenta nuevamente.')
@@ -153,26 +157,17 @@ export default function Booking({ }: Props) {
     return false
   }
 
-  const getTimeOptions = () => {
-    return Array.from({ length: 10 })
-      .map((_, i) => {
-        return {
-          value: new Date(new Date(new Date(data.date || new Date()).setHours(8 + i)).setMinutes(0)),
-          label: new Date(new Date(new Date(data.date || new Date()).setHours(8 + i)).setMinutes(0)).toLocaleString('es-ES', timeOptions)
-        }
-      })
-  }
-
   const checkData = () => data.fullname && data.fullname.includes(' ')
     && data.email && data.email.includes('.')
     && data.email.includes('@') && selectedDates.length
 
-  const handlePrint = 
+  const handlePrint =
     useReactToPrint({
       content: reactToPrintContent,
       documentTitle: "AwesomeFileName",
-      onAfterPrint: () => toast.success('Reserva Impresa'),
+      onAfterPrint: () => setHideButtons(false),
       onBeforeGetContent: () => setHideButtons(true),
+      onBeforePrint: () => setHideButtons(true),
       removeAfterPrint: true
     })
 
@@ -232,7 +227,7 @@ export default function Booking({ }: Props) {
         }}
       >
         <div className="page__col booking__text-col" style={{ width: isMobile ? '90vw' : '' }}>
-          <h1 className='booking__title'>{serviceName}</h1>
+          <h1 className='booking__title'>{service.name || 'Cargando Servicios...'}</h1>
           <h2 className='booking__subtitle'>Reserva tu cita</h2>
           <p className='booking__text'>
             Completa el formulario con tus datos para asegurar tu consulta. Estamos aquí para ayudarte en tu viaje hacia el bienestar emocional y mental.
@@ -396,12 +391,13 @@ export default function Booking({ }: Props) {
           <p className='booking__text'>
             Estos son los datos de tu reserva:
           </p>
-          <h2 className='booking__confirmed-service'>{serviceName}</h2>
+          <h2 className='booking__confirmed-service'>{service.name}</h2>
           <div className='booking__text'>
             {Object.keys(data).map((key: string, i) => <p key={i}><strong>{parseData[key]}: </strong>
               {data[key] instanceof Date ?
                 new Date(data[key]).toLocaleString('es-ES', dateOptions) + ', ' + new Date(data[key]).toLocaleString('es-ES', timeOptions)
                 : data[key]}</p>)}
+            <p><strong>Fechas: </strong><ul>{selectedDates.map((date: Date) => <li>∘ {getDate(date)}</li>)}</ul></p>
             <p style={{ marginTop: '3rem' }}><strong>Precio por sesión: </strong>{parsePrice(service.price)}</p>
             <p><strong>Precio final: </strong>{parsePrice(service.price * quantity)}</p>
           </div>

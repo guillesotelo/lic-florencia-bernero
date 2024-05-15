@@ -169,7 +169,7 @@ export default function Dropdown(props: Props) {
                                 objKey ? option[objKey] : option}
                     </p>)
                 :
-                <p className={`dropdown__option`} style={{ borderTop: 'none' }}>Loading...</p>
+                <p className={`dropdown__option`} style={{ borderTop: 'none' }}>Cargando...</p>
             }
         </div>
     }

@@ -140,7 +140,7 @@ export default function Home({ }: Props) {
                   Las sesiones se realizan a través de diferentes plataformas y medios digitales, como Google Meet, zoom, whatsapp, etc. 
                   '
                     buttonLabel='Reservar'
-                    handleButton={() => history.push('/new-booking?service=Psicoterapia')}
+                    handleButton={() => history.push('/new-booking?serviceId=6641d7777a4bc7c2193cbf50')}
                     delay='1s'
                     handleReadMore={() => history.push('/services?serviceId=psicoterapia')}
                   />
@@ -156,7 +156,7 @@ export default function Home({ }: Props) {
                   -Habilidades de aceptación radical
                   '
                     buttonLabel='Reservar'
-                    handleButton={() => history.push('/new-booking?service=Entrenamiento-en-Habilidades')}
+                    handleButton={() => history.push('/new-booking?serviceId=6641dd8b7a4bc7c2193cbf59')}
                     delay='1.5s'
                     handleReadMore={() => history.push('/services?serviceId=entrenamiento-en-habilidades')}
                   />
@@ -169,7 +169,7 @@ export default function Home({ }: Props) {
                   Es de destacar que no sólo se administra a pacientes con posible deterioro, sino que también se encuentra dirigida a personas que desean conocer su performance cognitiva (estado de su memoria, atención, etc.) en distintas etapas de la vida.
                   '
                     buttonLabel='Reservar'
-                    handleButton={() => history.push('/new-booking?service=Valoraciones-Neurocognitivas')}
+                    handleButton={() => history.push('/new-booking?serviceId=6641e7437a4bc7c2193cbfbe')}
                     delay='2s'
                     handleReadMore={() => history.push('/services?serviceId=valoraciones-neurocognitivas')}
                   />

@@ -635,7 +635,7 @@ export default function Booking({ }: Props) {
                                 </div>}
                             <div className="booking__no-edit-data">
                                 <h2 className="booking__data-label">Precio unitario</h2>
-                                <h2 className="booking__data-value">{parsePrice(data.price)}</h2>
+                                <h2 className="booking__data-value">{parsePrice(bookingServiceSelected.price)}</h2>
                             </div>
                             <InputField
                                 label='Nombre completo'
