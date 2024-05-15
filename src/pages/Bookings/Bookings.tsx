@@ -118,11 +118,13 @@ export default function Booking({ }: Props) {
         }
 
         if (selected !== -1) {
+            const dates = bookings[selected].dateObjects ? JSON.parse(bookings[selected].dateObjects || '').map((date: string) => new Date(date)) : []
             setData(bookings[selected])
             setBookingSelected(bookings[selected])
+            setBookingServiceSelected(dbServices.find(s => s._id === bookings[selected].serviceId))
             setDate(bookings[selected].date || null)
-            setSelectedDates(bookings[selected].dateObjects ? JSON.parse(bookings[selected].dateObjects || '').map((date: string) => new Date(date)) : [])
-            setQuantity(`${bookings[selected].quantity} ${bookings[selected].quantity === 1 ? 'sesión' : 'sesiones'}`)
+            setSelectedDates(dates)
+            setQuantity(`${dates.length} ${dates.length === 1 ? 'sesión' : 'sesiones'}`)
             setIsPaid(bookings[selected].isPaid ? 'Si' : 'No')
         }
         modalBehaviour()
@@ -131,7 +133,7 @@ export default function Booking({ }: Props) {
     useEffect(() => {
         if (dbServiceSelected !== -1) {
             const _serviceData = dbServices[dbServiceSelected]
-            setSelectedDays(_serviceData.day ? _serviceData.day.split(',') : [])
+            setSelectedDays(_serviceData.days ? _serviceData.days.split(',') : [])
             setServiceData(_serviceData)
         }
     }, [dbServiceSelected])
@@ -151,15 +153,10 @@ export default function Booking({ }: Props) {
             setDate(null)
             modalBehaviour()
             setEventClicked({})
-        }
-    }, [bookingSelected, quantity])
-
-    useEffect(() => {
-        if (isNewBooking) {
             setData(bookingSelected)
             setQuantity('1 sesión')
         }
-    }, [bookingSelected])
+    }, [bookingSelected, quantity])
 
     useEffect(() => {
         setOpenCalendar(false)
@@ -172,6 +169,7 @@ export default function Booking({ }: Props) {
     useEffect(() => {
         localStorage.setItem('bookingView', view)
         discardChanges()
+        setDbServiceSelected(-1)
     }, [view])
 
     const verifyUser = async () => {
@@ -335,8 +333,8 @@ export default function Booking({ }: Props) {
     }
 
     const getPrice = () => {
-        if (bookingServiceSelected.service) {
-            const { price } = dbServices.find(service => service.name.toLowerCase() === bookingServiceSelected.name.toLowerCase())
+        if (bookingServiceSelected._id) {
+            const { price } = bookingServiceSelected
             if (price) {
                 const hours = getQuantity()
                 return parseFloat((price * hours).toFixed(2))
@@ -353,7 +351,7 @@ export default function Booking({ }: Props) {
         const day = date.getDay()
         const today = new Date()
         const isTodayOrBefore = date <= today
-        const serviceDays = (getServiceData('day') || '').toLowerCase()
+        const serviceDays = (getServiceData('days') || '').toLowerCase()
         let disabled = [0, 1, 2, 3, 4, 5, 6]
         weekDays.map((weekday: string, i) => {
             if (serviceDays.includes(weekday.toLowerCase())) disabled = disabled.filter(n => n !== i)
@@ -371,10 +369,11 @@ export default function Booking({ }: Props) {
     const handleDateChange = (value: any, index: number): void => {
         if (value instanceof Date) {
             const updatedDates = [...selectedDates]
-            const mapDates = updatedDates.map(date => new Date(date).toLocaleDateString())
-            const dateVal = new Date(value).toLocaleDateString()
-
-            if (!mapDates.includes(dateVal) || mapDates.indexOf(dateVal) === index) updatedDates[index] = value
+            const mapDates = updatedDates.map(date => new Date(date).toLocaleString())
+            const dateVal = new Date(value).toLocaleString()
+            const notExists = !mapDates.includes(dateVal) || mapDates.indexOf(dateVal) === index
+            if (notExists) updatedDates[index] = value
+            else toast.error('Fecha y hora no disponibles')
             setSelectedDates(updatedDates)
         }
     }
@@ -384,8 +383,12 @@ export default function Booking({ }: Props) {
         const unavailableTime = getBookedSlots(bookings, true)
         const startTime = new Date(date)
         const endTime = new Date(date)
-        startTime.setHours(start || data.startTime || 9, 0, 0, 0)
-        endTime.setHours(end || data.endTime || 18, 0, 0, 0)
+
+        const serviceStart = bookingServiceSelected.startTime ? Number(bookingServiceSelected.startTime.split(':')[0]) : null
+        const serviceEnd = bookingServiceSelected.endTime ? Number(bookingServiceSelected.endTime.split(':')[0]) : null
+
+        startTime.setHours(start || serviceStart || 9, 0, 0, 0)
+        endTime.setHours(end || serviceEnd || 18, 0, 0, 0)
         const step = 60 * 60 * 1000
 
         for (let currentTime = startTime; currentTime <= endTime; currentTime.setTime(currentTime.getTime() + step)) {
@@ -419,18 +422,10 @@ export default function Booking({ }: Props) {
                         bookingEvents.push({
                             ...booking,
                             id: booking._id,
-                            title: `${booking.service} - ${booking.fullname}`,
+                            title: `${booking.serviceName} - ${booking.fullname}`,
                             start: moment(date).toDate(),
                             end: moment(date).add(booking.duration || 1, 'hours').toDate()
                         })
-                    })
-                } else if (booking.date) {
-                    bookingEvents.push({
-                        ...booking,
-                        id: booking._id,
-                        title: `${booking.service} - ${booking.fullname}`,
-                        start: moment(booking.date).toDate(),
-                        end: moment(booking.date).add(booking.duration || 1, 'hours').toDate()
                     })
                 }
             })
@@ -473,7 +468,7 @@ export default function Booking({ }: Props) {
         try {
             setLoading(true)
             const _serviceData = { ...serviceData }
-            if (selectedDays.length) _serviceData.day = selectedDays.join(', ')
+            if (selectedDays.length) _serviceData.days = selectedDays.join(', ')
 
             const saved = isNewService ? await createService(_serviceData) : await updateService(_serviceData)
             if (saved && saved._id) {
@@ -569,12 +564,9 @@ export default function Booking({ }: Props) {
     }
 
     const getTimeOptions = () => {
-        return Array.from({ length: 10 })
+        return Array.from({ length: 17 })
             .map((_, i) => {
-                return {
-                    value: new Date(new Date(new Date(data.date || new Date()).setHours(8 + i)).setMinutes(0)),
-                    label: new Date(new Date(new Date(data.date || new Date()).setHours(8 + i)).setMinutes(0)).toLocaleString('es-ES', timeOptions)
-                }
+                return `${i < 4 ? '0' : ''}${6 + i}:00`
             })
     }
 
@@ -582,8 +574,8 @@ export default function Booking({ }: Props) {
         return (
             <Modal
                 title={
-                    isNewBooking && !data.service && !data.fullname ? 'Nueva reserva'
-                        : `${data.service || bookingServiceSelected.name} - ${data.fullname}${bookingSelected._id ? ' (ID: ' + bookingSelected._id.substring(18) + ')' : ''}`
+                    isNewBooking && !data.serviceName && !data.fullname ? 'Nueva reserva'
+                        : `${data.serviceName || bookingServiceSelected.name} - ${data.fullname}${bookingSelected._id ? ' (ID: ' + bookingSelected._id.substring(18) + ')' : ''}`
                 }
                 onClose={discardChanges}>
                 {tryToRemove ?
@@ -599,7 +591,7 @@ export default function Booking({ }: Props) {
                             <div className="booking__col">
                                 <div className="booking__no-edit-data">
                                     <h2 className="booking__data-label">Total</h2>
-                                    <h2 className="booking__data-value">{bookingSelected.currency || 'USD'} ${bookingSelected.realPrice}</h2>
+                                    <h2 className="booking__data-value">{parsePrice(bookingSelected.totalPrice)}</h2>
                                 </div>
                             </div>
                         </div>
@@ -631,11 +623,11 @@ export default function Booking({ }: Props) {
                                 :
                                 <div className="booking__data">
                                     <h2 className="booking__data-label">Servicio</h2>
-                                    <h2 className="booking__data-value">{data.service}</h2>
+                                    <h2 className="booking__data-value">{data.serviceName}</h2>
                                 </div>}
                             <div className="booking__no-edit-data">
                                 <h2 className="booking__data-label">Precio unitario</h2>
-                                <h2 className="booking__data-value">{parsePrice(bookingServiceSelected.price)}</h2>
+                                <h2 className="booking__data-value">{parsePrice(data.price)}</h2>
                             </div>
                             <InputField
                                 label='Nombre completo'
@@ -673,7 +665,7 @@ export default function Booking({ }: Props) {
                                                 onChange={(date) => handleDateChange(date, i)}
                                                 value={selectedDates[i]}
                                                 tileDisabled={tileDisabled}
-                                                className='react-calendar calendar-fixed'
+                                                className='react-calendar'
                                             />
                                             :
                                             <div className='booking__date-time'>
@@ -725,7 +717,7 @@ export default function Booking({ }: Props) {
                             />
                             <div className="booking__no-edit-data">
                                 <h2 className="booking__data-label">{isNewBooking ? 'Precio final' : data.isPaid ? 'Monto registrado' : 'Monto total'}</h2>
-                                <h2 className="booking__data-value">{isNewBooking ? parsePrice(totalPrice) : parsePrice(data.price)}</h2>
+                                <h2 className="booking__data-value">{isNewBooking ? parsePrice(totalPrice) : parsePrice(data.totalPrice)}</h2>
                             </div>
                             {!isNewBooking ?
                                 <Switch
@@ -794,7 +786,7 @@ export default function Booking({ }: Props) {
                         />
                         <div className='booking__sidebar-event-row'>
                             <InputField
-                                label='Título'
+                                label='Título (público)'
                                 name="title"
                                 updateData={updateServiceData}
                                 value={serviceData.title}
@@ -826,20 +818,18 @@ export default function Booking({ }: Props) {
                             <Dropdown
                                 label='Bookeable desde'
                                 options={getTimeOptions()}
-                                selected={data.startTime}
-                                value={data.startTime ? new Date(data.startTime).toLocaleString('es-ES', timeOptions) : 'Seleccionar'}
-                                setSelected={(item: dataObj) => setData({ ...data, startTime: item.value })}
-                                objKey='label'
+                                selected={serviceData.startTime}
+                                value={serviceData.startTime || 'Seleccionar'}
+                                setSelected={value => setServiceData({ ...serviceData, startTime: value })}
                                 style={{ width: '28%' }}
                                 maxHeight='20vh'
                             />
                             <Dropdown
                                 label='Bookeable hasta'
                                 options={getTimeOptions()}
-                                selected={data.endTime}
-                                value={data.endTime ? new Date(data.endTime).toLocaleString('es-ES', timeOptions) : 'Seleccionar'}
-                                setSelected={(item: dataObj) => setData({ ...data, endTime: item.value })}
-                                objKey='label'
+                                selected={serviceData.endTime}
+                                value={serviceData.endTime || 'Seleccionar'}
+                                setSelected={value => setServiceData({ ...serviceData, endTime: value })}
                                 style={{ width: '28%' }}
                                 maxHeight='20vh'
                             />

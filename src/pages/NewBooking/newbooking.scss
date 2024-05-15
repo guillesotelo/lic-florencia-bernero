@@ -39,6 +39,8 @@
             border-radius: 1rem;
             margin-bottom: 4rem;
             animation: fade-in-up 1s ease-in forwards;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         &-datepicker {

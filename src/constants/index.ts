@@ -105,15 +105,19 @@ export const bookingHeaders = [
     },
     {
         name: 'SERVICIO',
-        value: 'service'
+        value: 'serviceName'
     },
     {
         name: 'NOMBRE COMPLETO',
         value: 'fullname'
     },
     {
-        name: 'PRECIO',
+        name: 'PRECIO UNITARIO',
         value: 'price'
+    },
+    {
+        name: 'PRECIO TOTAL',
+        value: 'totalPrice'
     },
     {
         name: 'PAGO CONFIRMADO',
@@ -141,7 +145,7 @@ export const serviceHeaders = [
     },
     {
         name: 'DÁS',
-        value: 'day'
+        value: 'days'
     },
 ]
 

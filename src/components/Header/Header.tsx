@@ -73,7 +73,7 @@ export default function Header({ }: Props) {
               <div className={`header__menu-account-drop${toggleMenu}`}>
                 <nav className="header__menu-account-drop-nav">
                   <ul className='header__menu-account-drop-list'>
-                    <li className='header__menu-account-item' onClick={() => history.push('/bookings')}>
+                    <li className='header__menu-account-item' onClick={() => history.push('/bookings?view=Reservas')}>
                       <img src={Bookings} className='header__menu-account-item-svg' alt='Bookings' draggable={false} />
                       <p className="header__menu-account-item-text">Bookings</p>
                     </li>

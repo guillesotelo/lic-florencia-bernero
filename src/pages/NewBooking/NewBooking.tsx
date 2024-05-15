@@ -97,10 +97,13 @@ export default function Booking({ }: Props) {
       setLoading(true)
 
       const bookingData = {
-        ...service,
         ...data,
         serviceId: service._id,
-        service: JSON.stringify(service)
+        service: JSON.stringify(service),
+        serviceName: service.name,
+        dateObjects: JSON.stringify(selectedDates),
+        price: service.price,
+        totalPrice: service.price * quantity,
       }
 
       const created = await createBooking(bookingData)
@@ -148,7 +151,7 @@ export default function Booking({ }: Props) {
         count++
       }
     })
-    const serviceDays = (service.day || '').toLowerCase()
+    const serviceDays = (service.days || '').toLowerCase()
     let disabled = [0, 1, 2, 3, 4, 5, 6]
     weekDays.map((weekday: string, i) => {
       if (serviceDays.includes(weekday.toLowerCase())) disabled = disabled.filter(n => n !== i)
@@ -192,8 +195,12 @@ export default function Booking({ }: Props) {
     const unavailableTime = getBookedSlots(bookings, true)
     const startTime = new Date(date)
     const endTime = new Date(date)
-    startTime.setHours(start || data.startTime || 9, 0, 0, 0)
-    endTime.setHours(end || data.endTime || 18, 0, 0, 0)
+
+    const serviceStart = service.startTime ? Number(service.startTime.split(':')[0]): null
+    const serviceEnd = service.endTime ? Number(service.endTime.split(':')[0]) : null
+    
+    startTime.setHours(start || serviceStart || 9, 0, 0, 0)
+    endTime.setHours(end || serviceEnd || 18, 0, 0, 0)
     const step = 60 * 60 * 1000
 
     for (let currentTime = startTime; currentTime <= endTime; currentTime.setTime(currentTime.getTime() + step)) {
@@ -319,7 +326,7 @@ export default function Booking({ }: Props) {
                           onChange={(date) => handleDateChange(date, i)}
                           value={selectedDates[i]}
                           tileDisabled={tileDisabled}
-                          className='react-calendar calendar-fixed'
+                          className='react-calendar'
                         />
                         :
                         <div className='booking__date-time'>

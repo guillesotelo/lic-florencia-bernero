@@ -169,7 +169,8 @@ export default function DataTable(props: Props) {
                             }}>
                             {(header.value === 'createdAt' || header.value === 'updatedAt' || header.value === 'start' || header.value === 'end')
                                 && row[header.value] ? `${getDate(row[header.value])}` :
-                                header.value === 'active' || header.value === 'isSuper' || header.value === 'isEvent' ? row[header.value] ? 'Si' : 'No' :
+                                header.value === 'active' || header.value === 'isSuper' || header.value === 'isEvent'
+                                    || header.value === 'isPaid' ? row[header.value] ? 'Si' : 'No' :
                                     header.value === 'createdBy' ? row[header.value] ? `User: ${row[header.value]}` : 'App' :
                                         header.value === 'status' ? typeof row[header.value] === 'string' ? row[header.value] : row[header.value] ? 'UP' : 'DOWN' :
                                             header.value === 'price' ? parsePrice(row[header.value]) :
@@ -224,7 +225,8 @@ export default function DataTable(props: Props) {
                                                         }}>
                                                         {(header.value === 'createdAt' || header.value === 'updatedAt' || header.value === 'start' || header.value === 'end')
                                                             && row[header.value] ? `${getDate(row[header.value])}` :
-                                                            header.value === 'active' || header.value === 'isSuper' || header.value === 'isEvent' ? row[header.value] ? 'Si' : 'No' :
+                                                            header.value === 'active' || header.value === 'isSuper' || header.value === 'isEvent'
+                                                                || header.value === 'isPaid' ? row[header.value] ? 'Si' : 'No' :
                                                                 header.value === 'createdBy' ? row[header.value] ? `User: ${row[header.value]}` : 'App' :
                                                                     header.value === 'status' ? row[header.value] ? 'UP' : 'DOWN' :
                                                                         header.value === 'price' ? parsePrice(row[header.value]) :
