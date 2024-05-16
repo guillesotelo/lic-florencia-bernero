@@ -207,7 +207,9 @@ export default function Booking({ }: Props) {
             const messages = await getMessageSession()
             if (messages && messages.length) {
                 const parsedMessages = messages.map((m: dataObj) => {
-                    m.messages = JSON.parse(m.messages)
+                    const sessionMessages = JSON.parse(m.messages)
+                    m.messages = sessionMessages
+                    m.length = sessionMessages.length
                     return m
                 })
                 setAllMessages(parsedMessages)
@@ -1117,6 +1119,39 @@ export default function Booking({ }: Props) {
         )
     }
 
+    const renderMessageModal = () => {
+        const { messages, createdAt } = allMessages[messageSelected]
+        return (
+            <Modal
+                title='Mensajes enviados y recibidos'
+                subtitle={getDate(createdAt)}
+                onClose={() => setMessageSelected(-1)}>
+                <div className='messagemodal__contaienr'>
+                    <div className="whatsapp__chat">
+                        {messages && messages.length ?
+                            messages.map((msg: dataObj) =>
+                                <div
+                                    className="whatsapp__chat-message"
+                                    style={{
+                                        backgroundColor: msg.response ? 'white' : '',
+                                        borderTopRightRadius: msg.response ? '.5rem' : 0,
+                                        borderTopLeftRadius: msg.response ? 0 : '.5rem',
+                                        alignSelf: msg.response ? 'flex-start' : ''
+                                    }}>
+                                    <p className="whatsapp__chat-message-text">{msg.text}</p>
+                                    <div className="whatsapp__chat-message-status">
+                                        <p className="whatsapp__chat-message-time">{new Date(msg.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                                    </div>
+                                </div>
+                            ) :
+                            <p>No hay mensajes para mostrar</p>
+                        }
+                    </div>
+                </div>
+            </Modal>
+        )
+    }
+
     return <div className="booking__container">
         <h1 className='page__title' style={{ margin: 0, filter: selected !== -1 || isNewBooking ? 'blur(10px)' : '' }}>Bookings</h1>
         <div className="booking__cta-btns" style={{ filter: selected !== -1 || isNewBooking ? 'blur(10px)' : '' }}>
@@ -1132,15 +1167,16 @@ export default function Booking({ }: Props) {
                 }}
             />
 
-            <Button
-                label={view === 'Servicios' ? 'Crear servicio' : view === 'Eventos' ? 'Nuevo evento' : 'Nueva reserva'}
-                handleClick={handleCreateButton}
-                bgColor="#87d18d"
-                style={{
-                    width: '30%',
-                    alignSelf: 'flex-end'
-                }}
-            />
+            {view !== 'Mensajes' ?
+                <Button
+                    label={view === 'Servicios' ? 'Crear servicio' : view === 'Eventos' ? 'Nuevo evento' : 'Nueva reserva'}
+                    handleClick={handleCreateButton}
+                    bgColor="#87d18d"
+                    style={{
+                        width: '30%',
+                        alignSelf: 'flex-end'
+                    }}
+                /> : ''}
         </div>
 
         {view === 'Calendario' ?
@@ -1227,6 +1263,7 @@ export default function Booking({ }: Props) {
                             : ''}
 
         {selected !== -1 || isNewBooking ? renderModal() : ''}
+        {selected === -1 && !isNewBooking && messageSelected !== -1 ? renderMessageModal() : ''}
         {renderServiceSidebar()}
         {renderEventSidebar()}
 
