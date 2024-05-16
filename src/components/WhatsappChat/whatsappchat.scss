@@ -1,21 +1,20 @@
 .whatsapp {
     &__container {
-        height: 60vh;
-        width: 20vw;
+        height: 35rem;
+        width: 24rem;
         background-color: white;
         border-radius: 1.5rem;
         overflow: hidden;
         animation: popup-chat .5s ease-in forwards;
         position: relative;
-        border: 1px solid lightgray;
         box-shadow: .2rem .2rem 2rem rgba(0, 0, 0, 0.231);
-
     }
 
     &__box {
         height: 100%;
         background-image: url(https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png);
         background-size: contain;
+        overflow: hidden;
     }
 
     &__header {
@@ -77,6 +76,10 @@
         display: flex;
         flex-direction: column;
         align-items: flex-end;
+        padding-bottom: 4rem;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 20rem;
 
         &-message {
             background-color: #E3FFC7;
@@ -89,19 +92,20 @@
 
             &-text {
                 margin: .7rem;
+                overflow-wrap: break-word;
             }
 
             &-status {
                 position: absolute;
                 bottom: .1rem;
-                right: .4rem;
+                right: .2rem;
                 display: flex;
                 flex-direction: row;
                 align-items: center;
                 margin: 0;
-                font-size: .8rem;
-                color: #797979;
-                height: 1.5rem;
+                font-size: .7rem;
+                color: #797979bc;
+                height: 1rem;
             }
 
             &-time {
@@ -109,7 +113,7 @@
             }
 
             &-check {
-                height: 1.5rem;
+                height: 1.2rem;
                 opacity: .4;
             }
         }
@@ -131,9 +135,9 @@
         align-items: center;
         background-color: #fff;
         border-radius: 1rem;
-        width: 80%;
         margin: 0 1rem;
         overflow: hidden;
+        height: 4rem;
 
         &-emojis {
             height: 2rem;
@@ -142,7 +146,7 @@
         }
 
         &-box {
-            height: 8vh;
+            height: 3rem;
             // width: 80%;
             font-size: 1rem;
             resize: none;
@@ -162,8 +166,8 @@
     &__send {
         &-container {
             background-color: #006257;
-            width: 3.5rem;
-            height: 3.5rem;
+            width: 3.2rem;
+            height: 3.2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -181,7 +185,7 @@
         }
 
         &-svg {
-            height: 2rem;
+            height: 1.6rem;
             filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(131deg) brightness(103%) contrast(101%);
         }
     }

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import DataTable from '../../components/DataTable/DataTable'
 import { dataObj } from '../../types'
-import { bookingHeaders, eventHeaders, paisesHispanohablantes, serviceHeaders, timeOptions, weekDays } from '../../constants'
+import { bookingHeaders, eventHeaders, messageHeaders, paisesHispanohablantes, serviceHeaders, timeOptions, weekDays } from '../../constants'
 import { createBooking, createService, deleteBooking, deleteService, getAllBookings, getAllServices, updateBooking, updateService, verifyToken } from '../../services'
 import InputField from '../../components/InputField/InputField'
 import Button from '../../components/Button/Button'
@@ -20,6 +20,7 @@ import Switch from '../../components/Switch/Switch'
 import Meet from '../../assets/icons/google-meet.svg'
 import { getAges, getDate, parseDateTime, parsePrice } from '../../helpers'
 import Modal from '../../components/Modal/Modal'
+import { getMessageSession } from '../../services/app'
 
 type Props = {}
 
@@ -89,6 +90,8 @@ export default function Booking({ }: Props) {
     const [sendEmail, setSendEmail] = useState(true)
     const [selectedDays, setSelectedDays] = useState<string[]>([])
     const [bookingServiceSelected, setBookingServiceSelected] = useState<dataObj>({})
+    const [allMessages, setAllMessages] = useState<dataObj[]>([])
+    const [messageSelected, setMessageSelected] = useState(-1)
     const history = useHistory()
     const location = useLocation()
     const { isMobile, isLoggedIn } = useContext(AppContext)
@@ -107,6 +110,7 @@ export default function Booking({ }: Props) {
         getBookings()
         getServices()
         getEvents()
+        getMessages()
     }, [])
 
     useEffect(() => {
@@ -190,6 +194,24 @@ export default function Booking({ }: Props) {
             setLoading(true)
             const allEvents = await getAllEvents()
             if (allEvents && allEvents.length) setEvents(allEvents)
+            setLoading(false)
+        } catch (err) {
+            setLoading(false)
+            console.error(err)
+        }
+    }
+
+    const getMessages = async () => {
+        try {
+            setLoading(true)
+            const messages = await getMessageSession()
+            if (messages && messages.length) {
+                const parsedMessages = messages.map((m: dataObj) => {
+                    m.messages = JSON.parse(m.messages)
+                    return m
+                })
+                setAllMessages(parsedMessages)
+            }
             setLoading(false)
         } catch (err) {
             setLoading(false)
@@ -1100,7 +1122,7 @@ export default function Booking({ }: Props) {
         <div className="booking__cta-btns" style={{ filter: selected !== -1 || isNewBooking ? 'blur(10px)' : '' }}>
             <Dropdown
                 label='Vista'
-                options={['Calendario', 'Reservas', 'Servicios', 'Eventos']}
+                options={['Calendario', 'Reservas', 'Servicios', 'Eventos', 'Mensajes']}
                 selected={view}
                 setSelected={setView}
                 value={view}
@@ -1189,7 +1211,20 @@ export default function Booking({ }: Props) {
                                 loading={loading}
                             />
                         </div>
-                        : ''}
+                        : view === 'Mensajes' ?
+                            <div style={{ width: '100%', filter: selected !== -1 || isNewBooking ? 'blur(10px)' : '' }}>
+                                <DataTable
+                                    title='Todas los mensajes'
+                                    name='mensajes'
+                                    tableData={allMessages}
+                                    setTableData={setAllMessages}
+                                    tableHeaders={messageHeaders}
+                                    selected={messageSelected}
+                                    setSelected={setMessageSelected}
+                                    loading={loading}
+                                />
+                            </div>
+                            : ''}
 
         {selected !== -1 || isNewBooking ? renderModal() : ''}
         {renderServiceSidebar()}

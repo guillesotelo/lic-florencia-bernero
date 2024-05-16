@@ -19,6 +19,22 @@ const sendContactEmail = async (data: dataObj) => {
     } catch (err) { console.log(err) }
 }
 
+const updateMessageSession = async (data: dataObj) => {
+    try {
+        const updated = await axios.post(`${API_URL}/api/app/updateMessageSession`, data, getConfig())
+        return updated.data
+    } catch (err) { console.log(err) }
+}
+
+const getMessageSession = async () => {
+    try {
+        const sessions = await axios.get(`${API_URL}/api/app/getSessionMessages`, getConfig())
+        return sessions.data
+    } catch (err) { console.log(err) }
+}
+
 export {
     sendContactEmail,
+    updateMessageSession,
+    getMessageSession
 }

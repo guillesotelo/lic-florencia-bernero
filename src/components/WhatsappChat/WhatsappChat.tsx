@@ -5,8 +5,9 @@ import DoubleCheck from '../../assets/icons/double-check.svg'
 import Smiley from '../../assets/icons/smile.svg'
 import Send from '../../assets/icons/send.svg'
 import { useHistory } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { KeyboardEvent, KeyboardEventHandler, useEffect, useRef, useState } from 'react'
 import { dataObj } from '../../types'
+import { updateMessageSession } from '../../services/app'
 
 type Props = {
     onClose?: () => void
@@ -15,24 +16,40 @@ type Props = {
 
 export default function WhatsappChat({ onClose, message }: Props) {
     const [allMessages, setAllMessages] = useState<dataObj[]>([])
+    const [messagesSent, setMessagesSent] = useState(false)
     const [messagesRead, setMessagesRead] = useState(false)
     const [sentResponse, setSentResponse] = useState(false)
+    const [sessionId, setSessionId] = useState('')
     const [data, setData] = useState<any>({ message })
     const history = useHistory()
+    const chatRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        if (allMessages.length && !sentResponse) {
-            setTimeout(() => setMessagesRead(true), 3000)
+        if (allMessages.length) {
+            if (!sentResponse) {
+                setTimeout(() => setMessagesSent(true), 1500)
+                setTimeout(() => setMessagesRead(true), 3000)
 
-            setTimeout(() => {
-                const newMessage = {
-                    text: 'Hola! Gracias por escribirme. Estaré contestando tu consulta tan pronto como pueda',
-                    response: true,
-                    date: new Date()
-                }
-                setAllMessages(prev => prev.concat(newMessage))
-                setSentResponse(true)
-            }, 5000)
+                setTimeout(() => {
+                    const newMessage = {
+                        text: 'Hola! Gracias por escribirme. Estaré contestando tu consulta tan pronto como pueda.',
+                        response: true,
+                        date: new Date()
+                    }
+                    setAllMessages(prev => prev.concat(newMessage))
+                    setSentResponse(true)
+                    setTimeout(() => {
+                        const newMessage = {
+                            text: 'Mientras tanto, escribí tu nombre, consulta y teléfono o email para ponerme en contacto contigo.',
+                            response: true,
+                            date: new Date()
+                        }
+
+                        setAllMessages(prev => prev.concat(newMessage))
+                    }, 2000)
+                }, 5000)
+            }
+            else if (allMessages.length >= 3) updateSession()
         }
     }, [allMessages])
 
@@ -49,6 +66,26 @@ export default function WhatsappChat({ onClose, message }: Props) {
         }
         setAllMessages(prev => prev.concat(newMessage))
         setData({ message: '' })
+        if (chatRef.current) chatRef.current.scrollTo({ behavior: 'smooth', top: chatRef.current.scrollHeight })
+    }
+
+    const handleEnter = (e: KeyboardEvent<HTMLTextAreaElement>): void => {
+        if (e.code === 'Enter') {
+            e.preventDefault()
+            sendMessage()
+        }
+    }
+
+    const updateSession = async () => {
+        try {
+            const session = await updateMessageSession({
+                _id: sessionId,
+                messages: JSON.stringify(allMessages)
+            })
+            if (session) setSessionId(session._id)
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (
@@ -66,7 +103,7 @@ export default function WhatsappChat({ onClose, message }: Props) {
                     <img src={Options} alt="Options" className="whatsapp__header-options" />
                 </div>
 
-                <div className="whatsapp__chat">
+                <div className="whatsapp__chat" ref={chatRef}>
                     {allMessages.map(msg =>
                         <div
                             className="whatsapp__chat-message"
@@ -79,7 +116,7 @@ export default function WhatsappChat({ onClose, message }: Props) {
                             <p className="whatsapp__chat-message-text">{msg.text}</p>
                             <div className="whatsapp__chat-message-status">
                                 <p className="whatsapp__chat-message-time">{new Date(msg.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                                {msg.response ? '' :
+                                {msg.response || !messagesSent ? '' :
                                     <img
                                         src={DoubleCheck}
                                         alt="Sent"
@@ -96,7 +133,7 @@ export default function WhatsappChat({ onClose, message }: Props) {
                 <div className="whatsapp__footer">
                     <div className="whatsapp__input">
                         <img src={Smiley} alt="" className="whatsapp__input-emojis" />
-                        <textarea className="whatsapp__input-box" value={data.message} onChange={e => updateData('message', e)} />
+                        <textarea className="whatsapp__input-box" value={data.message} onKeyDown={handleEnter} onChange={e => updateData('message', e)} />
                     </div>
                     <div className="whatsapp__send-container" onClick={sendMessage}>
                         <img src={Send} alt="Send" className="whatsapp__send-svg" />

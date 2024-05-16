@@ -192,4 +192,11 @@ export const eventHeaders = [
     },
 ]
 
+export const messageHeaders = [
+    {
+        name: 'FECHA',
+        value: 'createdAt'
+    },
+]
+
 export const weekDays = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
