@@ -169,6 +169,7 @@ export default function Booking({ }: Props) {
         localStorage.setItem('bookingView', view)
         discardChanges()
         setDbServiceSelected(-1)
+        setMessageSelected(-1)
         setIsNewService(false)
         setIsNewEvent(false)
     }, [view])
@@ -210,6 +211,7 @@ export default function Booking({ }: Props) {
                     const sessionMessages = JSON.parse(m.messages)
                     m.messages = sessionMessages
                     m.length = sessionMessages.length
+                    m.isToday = new Date(m.createdAt).toLocaleDateString() === new Date().toLocaleDateString()
                     return m
                 })
                 setAllMessages(parsedMessages)
@@ -1121,13 +1123,14 @@ export default function Booking({ }: Props) {
 
     const renderMessageModal = () => {
         const { messages, createdAt } = allMessages[messageSelected]
+        const isToday = new Date(createdAt).toLocaleDateString() === new Date().toLocaleDateString()
         return (
             <Modal
                 title='Mensajes enviados y recibidos'
-                subtitle={getDate(createdAt)}
+                subtitle={`${getDate(createdAt)} ${isToday ? '(HOY)' : ''}`}
                 onClose={() => setMessageSelected(-1)}>
                 <div className='messagemodal__contaienr'>
-                    <div className="whatsapp__chat">
+                    <div className="whatsapp__chat" style={{ backgroundColor: '#acacac52', borderRadius: '.5rem' }}>
                         {messages && messages.length ?
                             messages.map((msg: dataObj) =>
                                 <div
@@ -1249,6 +1252,8 @@ export default function Booking({ }: Props) {
                         </div>
                         : view === 'Mensajes' ?
                             <div style={{ width: '100%', filter: selected !== -1 || isNewBooking ? 'blur(10px)' : '' }}>
+                                <p style={{ margin: 0 }}><strong style={{ color: 'green' }}>■</strong>&nbsp;&nbsp;Mensajes nuevos (hoy)</p>
+                                <p style={{ margin: '0 0 1rem' }}><strong style={{ color: 'red' }}>■</strong>&nbsp;&nbsp;Mensajes pasados</p>
                                 <DataTable
                                     title='Todas los mensajes'
                                     name='mensajes'
@@ -1258,6 +1263,8 @@ export default function Booking({ }: Props) {
                                     selected={messageSelected}
                                     setSelected={setMessageSelected}
                                     loading={loading}
+                                    style={{ width: '20rem' }}
+                                    highlight='isToday'
                                 />
                             </div>
                             : ''}

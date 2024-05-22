@@ -19,6 +19,7 @@ type Props = {
     orderDataBy?: dataObj
     draggable?: boolean
     saveTableDataOrder?: (value: dataObj[]) => void
+    highlight?: string
 }
 
 export default function DataTable(props: Props) {
@@ -35,7 +36,8 @@ export default function DataTable(props: Props) {
         style,
         orderDataBy,
         draggable,
-        saveTableDataOrder
+        saveTableDataOrder,
+        highlight
     } = props
 
     const [maxItems, setMaxItems] = useState(max || 10)
@@ -163,9 +165,7 @@ export default function DataTable(props: Props) {
                             className={`datatable__row-item datatable__row-${header.value}`}
                             style={{
                                 width: `${100 / tableHeaders.length}%`,
-                                color: header.value === 'status' && typeof row[header.value] === 'string' ? 'orange' :
-                                    typeof row[header.value] === 'boolean' && header.value != 'userAlert' ?
-                                        row[header.value] ? 'green' : 'red' : ''
+                                color: highlight ? row[highlight] ? 'green' : 'red' : ''
                             }}>
                             {(header.value === 'createdAt' || header.value === 'updatedAt' || header.value === 'start' || header.value === 'end')
                                 && row[header.value] ? `${getDate(row[header.value])}` :
@@ -219,9 +219,7 @@ export default function DataTable(props: Props) {
                                                         className={`datatable__row-item datatable__row-${header.value}`}
                                                         style={{
                                                             width: `${100 / tableHeaders.length}%`,
-                                                            color: header.value === 'status' && typeof row[header.value] === 'string' ? 'orange' :
-                                                                typeof row[header.value] === 'boolean' && header.value != 'userAlert' ?
-                                                                    row[header.value] ? 'green' : 'red' : ''
+                                                            color: highlight ? row[highlight] ? 'green' : 'red' : ''
                                                         }}>
                                                         {(header.value === 'createdAt' || header.value === 'updatedAt' || header.value === 'start' || header.value === 'end')
                                                             && row[header.value] ? `${getDate(row[header.value])}` :
