@@ -194,9 +194,9 @@ export default function Booking({ }: Props) {
     const startTime = new Date(date)
     const endTime = new Date(date)
 
-    const serviceStart = service.startTime ? Number(service.startTime.split(':')[0]): null
+    const serviceStart = service.startTime ? Number(service.startTime.split(':')[0]) : null
     const serviceEnd = service.endTime ? Number(service.endTime.split(':')[0]) : null
-    
+
     startTime.setHours(start || serviceStart || 9, 0, 0, 0)
     endTime.setHours(end || serviceEnd || 18, 0, 0, 0)
     const step = 60 * 60 * 1000
@@ -358,20 +358,24 @@ export default function Booking({ }: Props) {
                   <span>{parsePrice(service.price * quantity)}</span>
                 </h3>
               </div>
-              <Button
-                label='Reservar'
-                handleClick={book}
-                bgColor={APP_COLORS.METAL}
-                textColor='white'
-                style={{ marginTop: '1rem' }}
-                disabled={!checkData() || loading}
-              />
-              <Button
-                label='Descartar'
-                handleClick={discard}
-                style={{ marginTop: '.5rem' }}
-                disabled={loading}
-              />
+              {loading ? <p>Creando reserva...</p>
+                :
+                <>
+                  <Button
+                    label='Reservar'
+                    handleClick={book}
+                    bgColor={APP_COLORS.METAL}
+                    textColor='white'
+                    style={{ marginTop: '1rem' }}
+                    disabled={!checkData()}
+                  />
+                  <Button
+                    label='Descartar'
+                    handleClick={discard}
+                    style={{ marginTop: '.5rem' }}
+                  />
+                </>
+              }
             </div>
           </div>
         </div>

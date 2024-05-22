@@ -27,6 +27,7 @@ export default function WhatsappChat({ onClose, message }: Props) {
     useEffect(() => {
         if (allMessages.length) {
             if (!sentResponse) {
+                setSentResponse(true)
                 setTimeout(() => setMessagesSent(true), 1500)
                 setTimeout(() => setMessagesRead(true), 3000)
 
@@ -37,17 +38,17 @@ export default function WhatsappChat({ onClose, message }: Props) {
                         date: new Date()
                     }
                     setAllMessages(prev => prev.concat(newMessage))
-                    setSentResponse(true)
-                    setTimeout(() => {
-                        const newMessage = {
-                            text: 'Mientras tanto, escribí tu nombre, consulta y teléfono o email para ponerme en contacto contigo.',
-                            response: true,
-                            date: new Date()
-                        }
-
-                        setAllMessages(prev => prev.concat(newMessage))
-                    }, 2000)
                 }, 5000)
+
+                setTimeout(() => {
+                    const newMessage = {
+                        text: 'Mientras tanto, escribí tu nombre, consulta y teléfono o email para ponerme en contacto contigo.',
+                        response: true,
+                        date: new Date()
+                    }
+
+                    setAllMessages(prev => prev.concat(newMessage))
+                }, 8000)
             }
             else if (allMessages.length >= 3) updateSession()
         }
@@ -97,7 +98,7 @@ export default function WhatsappChat({ onClose, message }: Props) {
                         <img src={Florencia} alt="Profile" className="whatsapp__header-img" />
                         <div className="whatsapp__header-text">
                             <p className="whatsapp__header-name" onClick={() => history.push('/sobre-mi')}>Lic. Florencia Bernero</p>
-                            <p className="whatsapp__header-status">online</p>
+                            <p className="whatsapp__header-status">{messagesRead && allMessages.length < 3 ? 'escribiendo...' : 'online'}</p>
                         </div>
                     </div>
                     <img src={Options} alt="Options" className="whatsapp__header-options" />
