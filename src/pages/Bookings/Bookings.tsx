@@ -1130,7 +1130,12 @@ export default function Booking({ }: Props) {
                 subtitle={`${getDate(createdAt)} ${isToday ? '(HOY)' : ''}`}
                 onClose={() => setMessageSelected(-1)}>
                 <div className='messagemodal__contaienr'>
-                    <div className="whatsapp__chat" style={{ backgroundColor: '#acacac52', borderRadius: '.5rem' }}>
+                    <div
+                        className="whatsapp__chat"
+                        style={{
+                            backgroundImage: 'url(https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png)',
+                            borderRadius: '.5rem'
+                        }}>
                         {messages && messages.length ?
                             messages.map((msg: dataObj) =>
                                 <div
