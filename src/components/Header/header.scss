@@ -148,5 +148,60 @@
                 }
             }
         }
+
+        &-svg {
+            height: 2rem;
+            filter: invert(49%) sepia(14%) saturate(1444%) hue-rotate(188deg) brightness(89%) contrast(77%);
+        }
+
+        &-sidebar {
+            position: fixed;
+            transform: translateX(150%);
+            transition: .4s;
+            width: 60vw;
+            height: 100vh;
+            right: 0;
+            top: 0;
+            background-color: white;
+            margin-top: 10vh;
+            border-left: 1px solid lightgray;
+
+            &--togled {
+                position: fixed;
+                transform: translateX(0);
+                width: 60vw;
+                transition: .4s;
+                right: 0;
+                top: 0;
+                height: 100vh;
+                background-color: white;
+                margin-top: 10vh;
+                border-left: 1px solid lightgray;
+            }
+        }
+    }
+}
+
+
+@media only screen and (max-width: 640px) {
+    .header {
+        &__menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+            padding: 0 !important;
+            margin-top: 2rem;
+        }
+
+        &__logo {
+            &-text {
+                font-size: 1rem;
+            }
+
+            &-img-iso {
+                height: 2rem;
+            }
+        }
     }
 }
