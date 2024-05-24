@@ -1,16 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import BG from '../../assets/images/site/BG.jpeg'
 import Button from '../../components/Button/Button'
 import { useHistory } from 'react-router-dom'
 import { APP_COLORS } from '../../constants'
-import { AppContext } from '../../AppContext'
 import ServiceCard from '../../components/ServiceCard/ServiceCard'
 import ServiceImage1 from '../../assets/images/site/services/1.png'
 import ServiceImage2 from '../../assets/images/site/services/2.png'
-import ServiceImage3 from '../../assets/images/site/services/3.png'
 import ServiceImage4 from '../../assets/images/site/services/4.png'
 import Whatsapp from '../../assets/icons/whatsapp.svg'
-import { parseMessageUri } from '../../helpers'
 import WhatsappChat from '../../components/WhatsappChat/WhatsappChat'
 
 type Props = {}
@@ -21,7 +18,6 @@ export default function Home({ }: Props) {
   const [showWhatsapp, setShowWhatsapp] = useState(false)
   const [showChat, setShowChat] = useState(false)
   const history = useHistory()
-  const { isMobile } = useContext(AppContext)
   const message = 'Hola Florencia! Me gustaría ponerme en contacto contigo para conocer más sobre tus servicios.'
 
   useEffect(() => {
@@ -49,21 +45,20 @@ export default function Home({ }: Props) {
     setTimeout(() => setShowWhatsapp(true), 3000)
   }, [])
 
-  const whatsappMe = () => {
-    return setShowChat(true)
-    const phoneNumber = 5493468649280
 
-    const a = document.createElement('a')
-    a.href = `https://wa.me/${phoneNumber}?text=${parseMessageUri(message || '')}`
-    a.target = '_blank'
-    a.click()
-  }
+  useEffect(() => {
+    const body = document.querySelector('body')
+    if (body) {
+      if (showChat) body.style.overflow = 'hidden'
+      else body.style.overflow = 'auto'
+    }
+  }, [showChat])
 
   const renderHome = () => {
     return (
       <div className='page__row'>
         <div className='home__container'>
-          <div className="home__landing">
+          <div className="home__landing" style={{ filter: showChat ? 'contrast(.3)' : 'contrast(1)' }}>
             <div className="home__landing-text">
               <div className="home__landing-text-col">
                 <div>
@@ -97,7 +92,7 @@ export default function Home({ }: Props) {
           <div className="home__section-intro scroll-item"></div>
           {renderIntro ?
             <>
-              <div className="home__section">
+              <div className="home__section" style={{ filter: showChat ? 'contrast(.3)' : 'contrast(1)' }}>
                 <div className="home__section-col" style={{ textAlign: 'center' }}>
                   <p className='home__section-text scroll-item' style={{ fontSize: '2.5rem', margin: '0 0 5vh 0' }}>Hola, muchas gracias por estar acá.</p>
                   <p className='home__section-text scroll-item'>Este espacio se encuentra dedicado a la Psicología y al entrenamiento en habilidades asociadas al bienestar:</p>
@@ -110,7 +105,7 @@ export default function Home({ }: Props) {
                 </div>
               </div>
 
-              <div className="home__section" style={{ backgroundColor: '#e8e8e8' }}>
+              <div className="home__section" style={{ backgroundColor: '#e8e8e8', filter: showChat ? 'contrast(.3)' : 'contrast(1)' }}>
                 <div className="home__section-col" style={{ textAlign: 'center' }}>
                   <p className='home__section-text scroll-item' style={{ fontSize: '1.4rem', margin: '1rem 0', animationDelay: '.5s' }}>
                     En la actualidad, sabemos que cuando integramos estas habilidades a nuestras vidas, a través de la práctica, podemos transformar nuestra manera de estar en el mundo, logrando atravesar esta experiencia conectados a lo que nos ofrece el momento presente, y acercándonos, a partir del vínculo con nuestros pensamientos y acciones, a la persona que queremos ser y a la vida que deseamos habitar.
@@ -132,7 +127,12 @@ export default function Home({ }: Props) {
             </>
             : ''}
 
-          <div className="home__section" style={{ backgroundColor: 'white' }}>
+          <div
+            className="home__section"
+            style={{
+              backgroundColor: 'white',
+              filter: showChat ? 'contrast(.3)' : 'contrast(1)'
+            }}>
             <div className="home__col">
               <p className="home__section-title scroll-item">Servicios</p>
               <div className="home__section-services scroll-item"></div>
@@ -188,7 +188,7 @@ export default function Home({ }: Props) {
               {showChat ?
                 <WhatsappChat onClose={() => setShowChat(false)} message={message} />
                 :
-                <img src={Whatsapp} alt="Whatsapp Me" onClick={whatsappMe} className="home__whatsapp-img" />
+                <img src={Whatsapp} alt="Whatsapp Me" onClick={() => setShowChat(true)} className="home__whatsapp-img" />
               }
             </div>
             : ''}
